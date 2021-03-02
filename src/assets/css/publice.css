@@ -1,0 +1,25 @@
+.toleft{
+    float: left;
+}
+.toright{
+    float: right;
+}
+.curhand{
+    cursor: pointer;
+}
+.clearfix:after{
+    content: "020"; 
+    display: block; 
+    height: 0; 
+    clear: both; 
+    visibility: hidden;  
+    }
+p,a,body{
+    margin: 0;
+}
+
+.addRedStar::before {
+    content: '*';
+    color: red;
+    font-size: 18px;
+}
