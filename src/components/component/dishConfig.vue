@@ -5,12 +5,12 @@
     </el-header>
     <el-container>
       <el-row>
-        <el-col :span="4" :offset="20" style="margin-bottom: 15px">
-          <el-button type="primary" @click="handleClick('add')">添加</el-button>
+        <el-col :span="2" :offset="22" style="margin-bottom: 15px">
+          <el-button style="width: 100%;" type="primary" @click="handleClick('add')">添加</el-button>
         </el-col>
 
-        <el-col :span="24">
-          <el-table :data="tableData" border style="width: 100%">
+        <el-col :span="23"  :offset="1">
+          <el-table :data="tableData"  border style="width: 100%;">
             <el-table-column
               align="center"
               prop="name"
@@ -208,6 +208,11 @@
       >
         <el-row>
           <div>
+            <el-col :span="22" >
+              <div
+                style="margin-bottom: 5px;text-align: left; font-size: 10px;margin-left: 5%;color:red"
+              >*多种口味或菜谱别名以"、"分隔。图片请上传长宽比为 4:3 的图片</div>
+            </el-col>
             <el-col :span="12">
               <div
                 class="demo-input-suffix addRedStar"
@@ -324,9 +329,9 @@
             </el-col>
 
             <el-col>
-              <el-col :span="12">
+              <el-col :span="14">
                 <div class="demo-input-suffix" style="margin-bottom: 15px">
-                  &emsp;推荐星级
+                  &emsp;&nbsp;推荐星级
                   <el-select
                     v-model="dialogData.star"
                     size="small"
@@ -341,6 +346,7 @@
                     >
                     </el-option>
                   </el-select>
+                  <i class="el-rate__icon el-icon-star-on" style="color: rgb(247, 186, 42);"><!----></i>
                 </div>
               </el-col>
               <!-- <el-col :span="12">
@@ -387,7 +393,7 @@
                 class="demo-input-suffix"
                 style="margin-bottom: 15px; text-align: left; margin-left: 15px"
               >
-                <span style="vertical-align: top">&emsp;&nbsp;活动描述</span>
+                <span style="vertical-align: top">&emsp;&nbsp;菜品描述</span>
                 <el-input
                   type="textarea"
                   :rows="3"
@@ -439,23 +445,23 @@ export default {
       starOption: [
         {
           value: "1",
-          label: "一星",
+          label: "1",
         },
         {
           value: "2",
-          label: "二星",
+          label: "2",
         },
         {
           value: "3",
-          label: "三星",
+          label: "3",
         },
         {
           value: "4",
-          label: "四星",
+          label: "4",
         },
         {
           value: "5",
-          label: "五星",
+          label: "5",
         },
       ],
       urlList: [],
@@ -491,7 +497,7 @@ export default {
       getSort(parme).then((res) => {
         let data = JSON.parse(res.data.payload);
         this.sortOption = data;
-       
+
       });
     },
     //编辑图片
@@ -510,7 +516,7 @@ export default {
     },
     //确定提交添加按钮
     isOk() {
-    
+
       let data = JSON.parse(JSON.stringify(this.dialogData));
       if (!data.name) {
         this.$message({ type: "warning", message: "菜品名称不能为空" });
@@ -634,11 +640,11 @@ export default {
         data.pictures.forEach((element, index) => {
           let obj = new Object();
           obj.url = element;
-         
+
           this.urlList.push(obj);
         });
         this.dialogData = data;
-       
+
         this.dialogVisible = true;
       }
     },

@@ -5,19 +5,19 @@
     </el-header>
     <el-container>
       <el-row>
-        <el-col :span="2" style="margin-bottom: 15px">
-          <el-button type="primary" @click="dialogVisible = true"
+        <el-col :span="2" :offset="1"  style="margin-bottom: 15px">
+          <el-button type="primary" style="width:100%" @click="dialogVisible = true"
             >添加</el-button
           >
         </el-col>
 
-        <el-col :span="24">
+        <el-col :span="23" :offset="1">
           <el-table :data="tableData" border style="width: 100%">
-            <el-table-column
-              align="center"
-              prop="id"
-              label="序号"
-            ></el-table-column>
+            <!--<el-table-column-->
+              <!--align="center"-->
+              <!--prop="id"-->
+              <!--label="序号"-->
+            <!--&gt;</el-table-column>-->
             <el-table-column align="center" prop="type" label="问题类型">
             </el-table-column>
             <el-table-column align="center" prop="address" label="问题">
@@ -30,7 +30,7 @@
 
             <el-table-column align="center" prop="reply" label="回答">
             </el-table-column>
-            <el-table-column align="center" label="按钮状态">
+            <el-table-column align="center" label="状态">
               <template slot-scope="scope">
                 <div>
                   <el-switch
@@ -52,7 +52,7 @@
                 <el-button type="danger" size="small" @click="delIt(scope.row)"
                   >删除</el-button
                 >
-               
+
               </template>
             </el-table-column>
           </el-table>
@@ -72,19 +72,25 @@
     </div>
 
     <!-- 添加上传弹窗 -->
-    <el-dialog title="问题添加" :visible.sync="dialogVisible" width="35%">
+    <el-dialog title="添加" :visible.sync="dialogVisible" width="35%"  style="text-align: left">
       <div>
-        <div style="margin: 15px">
-          <span class="demo-input-suffix addRedStar">
-            问题类型
+        <div  style="margin: 15px">
+          <span class="demo-input-suffix addRedStar">问题类型
             <span style="width: 350px">
-              <el-input
+              <el-select
+                v-model="answerData.type"
                 size="small"
                 style="width: 150px"
-                placeholder="问题类型"
-                v-model="answerData.type"
+                placeholder="请选择"
               >
-              </el-input>
+                <el-option
+                  v-for="item in QAOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
               <span
                 class="demo-input-suffix addRedStar"
                 style="margin-left: 15px; width: 120px"
@@ -101,7 +107,7 @@
 
         <div class="demo-input-suffix" style="margin: 15px">
           <span
-            style="vertical-align: top; margin-left: 55px"
+            style="vertical-align: top"
             class="addRedStar"
             >问题</span
           >
@@ -115,9 +121,9 @@
           >
           </el-input>
         </div>
-        <div class="demo-input-suffix">
+        <div class="demo-input-suffix" style="margin: 15px">
           <span
-            style="vertical-align: top; margin-left: 55px"
+            style="vertical-align: top"
             class="addRedStar"
             >回答</span
           >
@@ -219,6 +225,20 @@ export default {
     return {
       merchantId:"",
       fileList: [],
+      QAOption: [
+        {
+          value: "设施问题",
+          label: "设施问题",
+        },
+        {
+          value: "菜品问题",
+          label: "菜品问题",
+        },
+        {
+          value: "活动问题",
+          label: "活动问题",
+        }
+      ],
       answerData: { reply: "", question: "", type: "", enable: false },
       editData: {},
       dialogVisible: false,
@@ -275,8 +295,12 @@ export default {
     //执行删除操作
     delIt(val) {
       delAnwser(val.id).then((res) => {
-       
-        this.getData();
+        console.log(res
+        )
+        if (res.data.retcode === 0) {
+          this.getData();
+          this.$message({type:"success",message:"删除成功"})
+        }
       });
     },
     //添加上传操作
@@ -284,7 +308,7 @@ export default {
       let parme = JSON.parse(JSON.stringify(this.answerData));
       parme.question = parme.question.split("、");
       parme.merchantId=this.merchantId;
-    
+
       createAnwser(parme).then((res) => {
         if (res.retcode === 0) {
           this.getData();

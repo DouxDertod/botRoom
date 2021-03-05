@@ -5,12 +5,12 @@
     </el-header>
     <el-container>
       <el-row>
-        <el-col :span="4" :offset="20" style="margin-bottom: 15px">
-          <el-button type="primary" @click="handleClick('add')">添加</el-button>
+        <el-col :span="2" :offset="22" style="margin-bottom: 15px">
+          <el-button style="width:100%" type="primary" @click="handleClick('add')">添加</el-button>
           <!-- <el-button @click="delIt()" type="danger">删除</el-button> -->
         </el-col>
 
-        <el-col :span="24">
+        <el-col :span="23" :offset="1">
           <el-table :data="tableData" border style="width: 100%">
             <!-- <el-table-column type="selection" width="40"></el-table-column> -->
             <el-table-column
@@ -146,9 +146,9 @@
                 ></el-input-number>
               </div>
             </el-col>
-            <el-col :span="12" style="text-align: left">
+            <el-col :span="12" style="text-align: right">
               <span style="margin-bottom: 15px">
-                <span style="vertical-align: top">&emsp;&emsp;图片：</span>
+                <span style="vertical-align: top">&emsp;活动图片：</span>
                 <el-upload
                   ref="upload"
                   :class="urlList.length >= 1 ? 'hide' : ''"
@@ -190,8 +190,9 @@
                 活动时间：
 
                 <el-date-picker
+                  popper-class="customPopper"
                   size="small"
-                  style="width: 350px"
+                  style="width:80%"
                   v-model="valueTime"
                   type="datetimerange"
                   range-separator="至"
@@ -224,7 +225,7 @@
                 </el-select>
               </div>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="12" style="text-align: right">
               <div
                 class="demo-input-suffix addRedStar"
                 style="margin-bottom: 15px"
@@ -241,7 +242,7 @@
                 class="demo-input-suffix"
                 style="margin-bottom: 15px; text-align: left; margin-left: 15px"
               >
-                <span style="vertical-align: top">&emsp;活动描述：</span>
+                <span style="vertical-align: top">&emsp;活动介绍：</span>
                 <el-input
                   type="textarea"
                   :rows="5"

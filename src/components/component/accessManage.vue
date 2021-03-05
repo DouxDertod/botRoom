@@ -5,7 +5,7 @@
     </el-header>
     <el-container>
       <el-row>
-        <el-col :span="23" :offset="1" style="text-align: left; padding: 10px">
+        <el-col :span="23" :offset="1" style="text-align: left; padding: 10px 0">
           开启取号服务
           <span style="margin-left: 25px">
             <el-radio-group @change="changeIt" v-model="dataList.queue">
@@ -16,7 +16,7 @@
           <el-divider></el-divider>
         </el-col>
         <!-- ----------- -->
-        <el-col :span="23" :offset="1" style="text-align: left; padding: 10px">
+        <el-col :span="23" :offset="1" style="text-align: left; padding: 10px 0">
           用户等位时，是否开启菜单推荐
           <span style="margin-left: 25px">
             <el-radio-group @change="changeIt" v-model="dataList.menu">
@@ -25,7 +25,7 @@
             </el-radio-group>
           </span>
         </el-col>
-        <el-col :span="23" :offset="1" style="text-align: left; padding: 10px">
+        <el-col :span="23" :offset="1" style="text-align: left; padding: 10px 0">
           <el-radio-group
             @change="changeIt"
             v-model="dataList.menuAllTime"
@@ -66,105 +66,106 @@
           </el-radio-group>
         </el-col>
         <!-- -------------- -->
-        <el-col :span="23" :offset="1" style="text-align: left; padding: 10px">
-          用户等位时，是否开启互动内容
-          <span style="margin-left: 25px">
-            <el-radio-group @change="changeIt" v-model="dataList.interactive">
-              <el-radio :label="true">开启</el-radio>
-              <el-radio :label="false">关闭</el-radio>
-            </el-radio-group>
-          </span>
-        </el-col>
-        <el-col :span="23" :offset="1" style="text-align: left; padding: 10px">
-          <el-radio-group
-            @change="changeIt"
-            v-model="dataList.interactiveAllTime"
-            style="width: 100%"
-          >
-            <el-col>
-              <span style="font-size: 16px">开启时间</span>
-              <el-radio style="margin-left: 25px" :label="false"
-                >定时开启</el-radio
-              >
-            </el-col>
-            <el-col
-              :span="23"
-              :offset="1"
-              style="text-align: left; padding: 20px"
-            >
-              <span
-                v-show="!dataList.interactiveAllTime"
-                style="margin-left: 25px"
-              >
-                <el-time-picker
-                  is-range
-                  format="HH:mm"
-                  value-format="HH:mm"
-                  v-model="valueTime1"
-                  @change="chengeTime(1)"
-                  range-separator="至"
-                  start-placeholder="开始时间"
-                  end-placeholder="结束时间"
-                  placeholder="选择时间范围"
-                >
-                </el-time-picker>
-              </span>
-            </el-col>
-            <el-col :span="24" style="text-align: left">
-              <el-radio style="margin-left: 95px" :label="true"
-                >所有时间</el-radio
-              >
-              <el-divider></el-divider>
-            </el-col>
-          </el-radio-group>
-        </el-col>
+        <!--此版本下列功能暂不可用-->
+        <!--<el-col :span="23" :offset="1" style="text-align: left; padding: 10px 0">-->
+          <!--用户等位时，是否开启互动内容-->
+          <!--<span style="margin-left: 25px">-->
+            <!--<el-radio-group @change="changeIt" v-model="dataList.interactive">-->
+              <!--<el-radio :label="true">开启</el-radio>-->
+              <!--<el-radio :label="false">关闭</el-radio>-->
+            <!--</el-radio-group>-->
+          <!--</span>-->
+        <!--</el-col>-->
+        <!--<el-col :span="23" :offset="1" style="text-align: left; padding: 10px 0">-->
+          <!--<el-radio-group-->
+            <!--@change="changeIt"-->
+            <!--v-model="dataList.interactiveAllTime"-->
+            <!--style="width: 100%"-->
+          <!--&gt;-->
+            <!--<el-col>-->
+              <!--<span style="font-size: 16px">开启时间</span>-->
+              <!--<el-radio style="margin-left: 25px" :label="false"-->
+                <!--&gt;定时开启</el-radio-->
+              <!--&gt;-->
+            <!--</el-col>-->
+            <!--<el-col-->
+              <!--:span="23"-->
+              <!--:offset="1"-->
+              <!--style="text-align: left; padding: 20px"-->
+            <!--&gt;-->
+              <!--<span-->
+                <!--v-show="!dataList.interactiveAllTime"-->
+                <!--style="margin-left: 25px"-->
+              <!--&gt;-->
+                <!--<el-time-picker-->
+                  <!--is-range-->
+                  <!--format="HH:mm"-->
+                  <!--value-format="HH:mm"-->
+                  <!--v-model="valueTime1"-->
+                  <!--@change="chengeTime(1)"-->
+                  <!--range-separator="至"-->
+                  <!--start-placeholder="开始时间"-->
+                  <!--end-placeholder="结束时间"-->
+                  <!--placeholder="选择时间范围"-->
+                <!--&gt;-->
+                <!--</el-time-picker>-->
+              <!--</span>-->
+            <!--</el-col>-->
+            <!--<el-col :span="24" style="text-align: left">-->
+              <!--<el-radio style="margin-left: 95px" :label="true"-->
+                <!--&gt;所有时间</el-radio-->
+              <!--&gt;-->
+              <!--<el-divider></el-divider>-->
+            <!--</el-col>-->
+          <!--</el-radio-group>-->
+        <!--</el-col>-->
         <!-- ---------- -->
-        <el-col :span="23" :offset="1" style="text-align: left; padding: 10px">
-          用户等位时，是否开启周边推荐
-          <span style="margin-left: 25px">
-            <el-radio-group @change="changeIt" v-model="dataList.recommend">
-              <el-radio :label="true">开启</el-radio>
-              <el-radio :label="false">关闭</el-radio>
-            </el-radio-group>
-          </span>
-        </el-col>
-        <el-col :span="23" :offset="1" style="text-align: left; padding: 10px">
-          <el-radio-group v-model="dataList.recommendAllTime">
-            <el-col>
-              <span style="font-size: 16px">开启时间</span>
-              <el-radio style="margin-left: 25px" :label="false">定时开启</el-radio>
-            </el-col>
-            <el-col
-              :span="23"
-              :offset="1"
-              style="text-align: left; padding: 20px"
-            >
-              <span v-if="!dataList.recommendAllTime" style="margin-left: 25px">
-                <el-time-picker
-                  is-range
-                  v-model="valueTime2"
-                  @change="chengeTime(2)"
-                  format="HH:mm"
-                  value-format="HH:mm"
-                  range-separator="至"
-                  start-placeholder="开始时间"
-                  end-placeholder="结束时间"
-                  placeholder="选择时间范围"
-                >
-                </el-time-picker>
-              </span>
-            </el-col>
-            <el-col :span="24" style="text-align: left">
-              <el-radio style="margin-left: 95px"  :label="true"
-                >所有时间</el-radio
-              >
-            </el-col>
-            <!-- <el-col :span="24" style="text-align: left; padding: 10px">
-            周边内容
-            <el-col :span="20"> </el-col>
-          </el-col> -->
-          </el-radio-group>
-        </el-col>
+        <!--<el-col :span="23" :offset="1" style="text-align: left; padding: 10px 0">-->
+          <!--用户等位时，是否开启周边推荐-->
+          <!--<span style="margin-left: 25px">-->
+            <!--<el-radio-group @change="changeIt" v-model="dataList.recommend">-->
+              <!--<el-radio :label="true">开启</el-radio>-->
+              <!--<el-radio :label="false">关闭</el-radio>-->
+            <!--</el-radio-group>-->
+          <!--</span>-->
+        <!--</el-col>-->
+        <!--<el-col :span="23" :offset="1" style="text-align: left; padding: 10px 0">-->
+          <!--<el-radio-group v-model="dataList.recommendAllTime">-->
+            <!--<el-col>-->
+              <!--<span style="font-size: 16px">开启时间</span>-->
+              <!--<el-radio style="margin-left: 25px" :label="false">定时开启</el-radio>-->
+            <!--</el-col>-->
+            <!--<el-col-->
+              <!--:span="23"-->
+              <!--:offset="1"-->
+              <!--style="text-align: left; padding: 20px"-->
+            <!--&gt;-->
+              <!--<span v-if="!dataList.recommendAllTime" style="margin-left: 25px">-->
+                <!--<el-time-picker-->
+                  <!--is-range-->
+                  <!--v-model="valueTime2"-->
+                  <!--@change="chengeTime(2)"-->
+                  <!--format="HH:mm"-->
+                  <!--value-format="HH:mm"-->
+                  <!--range-separator="至"-->
+                  <!--start-placeholder="开始时间"-->
+                  <!--end-placeholder="结束时间"-->
+                  <!--placeholder="选择时间范围"-->
+                <!--&gt;-->
+                <!--</el-time-picker>-->
+              <!--</span>-->
+            <!--</el-col>-->
+            <!--<el-col :span="24" style="text-align: left">-->
+              <!--<el-radio style="margin-left: 95px"  :label="true"-->
+                <!--&gt;所有时间</el-radio-->
+              <!--&gt;-->
+            <!--</el-col>-->
+            <!--&lt;!&ndash; <el-col :span="24" style="text-align: left; padding: 10px 0">-->
+            <!--周边内容-->
+            <!--<el-col :span="20"> </el-col>-->
+          <!--</el-col> &ndash;&gt;-->
+          <!--</el-radio-group>-->
+        <!--</el-col>-->
       </el-row>
     </el-container>
   </div>

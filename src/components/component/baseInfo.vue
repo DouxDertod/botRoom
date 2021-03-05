@@ -182,7 +182,7 @@
         </el-col>
       </el-row>
       <!-- 座位情况弹窗 -->
-      <el-dialog title="桌型编辑" :visible.sync="dialogVisible1" width="35%">
+      <el-dialog :title="dialogTitle" :visible.sync="dialogVisible1" width="35%">
         <span>
           <div>
             <el-form ref="form" inline size="small" label-width="80px">
@@ -250,11 +250,11 @@
       </el-dialog>
 
       <!-- 运营时间弹窗 -->
-      <el-dialog title="修改" :visible.sync="dialogVisible2" width="40%">
+      <el-dialog title="营业时间" :visible.sync="dialogVisible2" width="40%">
         <span>
           <div style="text-align: left">
             <el-button size="small" type="primary" @click="addData(2)"
-              >新增数据</el-button
+              >添加</el-button
             >
           </div>
           <div
@@ -371,6 +371,7 @@ export default {
         type: "",
       },
       baseInfo: "",
+      dialogTitle:"",
       dialogVisible1: false,
       dialogVisible2: false,
       timeData: [
@@ -440,13 +441,16 @@ export default {
         status: false,
         type: "",
       };
+      this.dialogTitle="添加";
       this.dialogVisible1 = true;
     },
     //编辑桌型
     editTable(val) {
+      this.dialogTitle="编辑";
       this.num = 5;
       let data = JSON.parse(JSON.stringify(val));
       this.tableInfo = data;
+
       this.dialogVisible1 = true;
     },
     //删除桌型
@@ -477,7 +481,9 @@ export default {
           // let obj = new Object();
           let data = JSON.parse(res.data.payload);
           if (this.fileList.length === 0) {
-          
+            if (!data.images){
+              data.images=[]
+            }
             data.images.forEach((item, index) => {
               let obj = new Object();
               obj.url = item;
@@ -485,13 +491,13 @@ export default {
             });
           } //图片新增操作
           else if (this.preImg.length === 0 && this.fileList.length !== 0&&this.submitNum===5) {
-          
+
             let index = data.images.length;
              let obj = new Object();
             obj.url = data.images[index];
             this.fileList.push(obj);
           } else if(this.preImg.length !== 0){
-          
+
             let obj = {};
             let index = this.fixIndex; //获取修改的图片位置
             obj.url = data.images[index];
@@ -513,6 +519,7 @@ export default {
     //打开运营时间窗口
     openTime() {
       //数据处理
+      if (!this.baseInfo.businessHours)this.baseInfo.businessHours=[]
       let data = this.baseInfo.businessHours;
       //复制上可以修改的数据项
       for (let i = 0; i < data.length; i++) {
@@ -572,6 +579,48 @@ export default {
     //修改弹窗新增数据：座位1 或 运营2
     addData(val) {
       let data;
+      if(this.timeData.length<1){
+        this.timeData= [
+          {
+            startTime: "",
+            endTime: "",
+            weekStar: "",
+            weekEnd: "",
+
+            options: [
+              {
+                value: "周一",
+                label: "一",
+              },
+              {
+                value: "周二",
+                label: "二",
+              },
+              {
+                value: "周三",
+                label: "三",
+              },
+              {
+                value: "周四",
+                label: "四",
+              },
+              {
+                value: "周五",
+                label: "五",
+              },
+              {
+                value: "周六",
+                label: "六",
+              },
+              {
+                value: "周日",
+                label: "日",
+              },
+            ],
+          },
+        ];
+        return;
+      }
       let [...option] = this.timeData[0].options;
       data = {
         startTime: "",
@@ -621,17 +670,19 @@ export default {
             let parme = this.tableInfo;
             parme.merchantId = this.merchantId;
             creatTable(parme).then((res) => {
-            
-              this.getData();
-              this.$message({ type: "success", message: "添加成功" });
-              this.dialogVisible1 = false;
+              if(res.status==200){
+                this.getData();
+                this.$message({ type: "success", message: "添加成功" });
+                this.dialogVisible1 = false;
+              }
+
             });
           } //点击编辑接口
           else {
-          
+
             let parme = this.tableInfo;
             updataTable(parme).then((res) => {
-            
+
               this.getData();
               this.$message({ type: "success", message: "添加成功" });
               this.dialogVisible1 = false;
@@ -645,7 +696,7 @@ export default {
         let index = (this.fixIndex = this.baseInfo.images.indexOf(
           this.preImg.url
         ));
-      
+
         //判断是否图片更新操作 否则为新增
         if (data) {
           this.preImg.length === 0

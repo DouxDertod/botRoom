@@ -2,7 +2,7 @@
   <div class="top">
     <el-row>
       <el-col :span="2">
-        <img style="margin: 10px" src="../assets/img/logo.png" alt="" />
+        <img style="margin: 10px" src="../assets/img/logo2.png" width="84px" alt="" />
       </el-col>
       <el-col :span="10" class="toright">
         <el-menu
@@ -15,7 +15,7 @@
         >
           <el-submenu index="1">
             <template slot="title"
-              ><img src="../assets/img/right.png" alt="" /><span
+              ><img src="../assets/img/right2.png"  alt="" /><span
                 >admin</span
               ></template
             >
