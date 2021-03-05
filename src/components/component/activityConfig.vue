@@ -146,7 +146,7 @@
                 ></el-input-number>
               </div>
             </el-col>
-            <el-col :span="12" style="text-align: right">
+            <el-col :span="12" style="text-align: left">
               <span style="margin-bottom: 15px">
                 <span style="vertical-align: top">&emsp;活动图片：</span>
                 <el-upload
@@ -225,7 +225,7 @@
                 </el-select>
               </div>
             </el-col>
-            <el-col :span="12" style="text-align: right">
+            <el-col :span="12" style="text-align: left">
               <div
                 class="demo-input-suffix addRedStar"
                 style="margin-bottom: 15px"
