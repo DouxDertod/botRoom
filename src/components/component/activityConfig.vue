@@ -5,7 +5,7 @@
     </el-header>
     <el-container>
       <el-row>
-        <el-col :span="2" :offset="22" style="margin-bottom: 15px">
+        <el-col :span="2" :offset="1" style="margin-bottom: 15px">
           <el-button style="width:100%" type="primary" @click="handleClick('add')">添加</el-button>
           <!-- <el-button @click="delIt()" type="danger">删除</el-button> -->
         </el-col>
@@ -58,7 +58,7 @@
             ></el-table-column>
             <el-table-column align="center" prop="content" label="活动介绍">
             </el-table-column>
-            <el-table-column align="center" prop="address" label="活动状态">
+            <el-table-column align="center" prop="address" label="启用状态">
               <template slot-scope="scope">
                 <el-switch
                   @change="changeItBtn(scope.row)"
@@ -230,7 +230,7 @@
                 class="demo-input-suffix addRedStar"
                 style="margin-bottom: 15px"
               >
-                活动状态：
+                启用状态：
                 <el-radio-group v-model="dialogData.enable" size="small">
                   <el-radio :label="true">开启</el-radio>
                   <el-radio :label="false">关闭</el-radio>
@@ -523,12 +523,29 @@ export default {
     },
     //启用状态修改
     changeItBtn(item) {
-      updataActive(item).then((res) => {
-        if (res.data.retcode === 0) {
-          this.getData();
-          this.$message({ type: "success", message: "修改成功！" });
-        }
-      });
+      const statusMSG = !item.enable?"禁用":"启用";
+      this.$confirm("此操作将<span style='color: red'>"+statusMSG+"</span>\""+item.title+"\"活动, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        dangerouslyUseHTMLString: true,
+        type: "warning",
+      })
+        .then(() => {
+          updataActive(item).then((res) => {
+            if (res.data.retcode === 0) {
+              this.getData();
+              this.$message({ type: "success", message: "修改成功！" });
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消"+statusMSG,
+          });
+          item.enable=!item.enable;
+        });
+
     },
     handleSizeChange(val) {
       this.pageSize = val

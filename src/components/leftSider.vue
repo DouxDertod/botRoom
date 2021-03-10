@@ -30,7 +30,7 @@
         <span slot="title">排队记录</span>
       </el-menu-item>
       <el-menu-item index="8">
-        <span slot="title">菜品分类</span>
+        <span slot="title">菜单分类</span>
       </el-menu-item>
     </el-menu>
   </div>

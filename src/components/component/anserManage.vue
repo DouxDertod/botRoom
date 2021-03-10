@@ -30,7 +30,7 @@
 
             <el-table-column align="center" prop="reply" label="回答">
             </el-table-column>
-            <el-table-column align="center" label="状态">
+            <el-table-column align="center" label="启用状态">
               <template slot-scope="scope">
                 <div>
                   <el-switch
@@ -72,9 +72,9 @@
     </div>
 
     <!-- 添加上传弹窗 -->
-    <el-dialog title="添加" :visible.sync="dialogVisible" width="35%"  style="text-align: left">
-      <div>
-        <div  style="margin: 15px">
+    <el-dialog title="添加" :visible.sync="dialogVisible" width="35%" >
+      <div  style="text-align: left">
+        <div  style="margin: 15px" >
           <span class="demo-input-suffix addRedStar">问题类型
             <span style="width: 350px">
               <el-select
@@ -95,7 +95,7 @@
                 class="demo-input-suffix addRedStar"
                 style="margin-left: 15px; width: 120px"
               >
-                状态&emsp;
+                启用状态 &emsp;
                 <el-radio-group v-model="answerData.enable">
                   <el-radio :label="true">开启</el-radio>
                   <el-radio :label="false">关闭</el-radio>
@@ -161,7 +161,7 @@
                 class="demo-input-suffix addRedStar"
                 style="margin-left: 15px; width: 120px"
               >
-                状态&emsp;
+                启用状态;
                 <el-radio-group v-model="editData.enable">
                   <el-radio :label="true">开启</el-radio>
                   <el-radio :label="false">关闭</el-radio>
@@ -285,23 +285,54 @@ export default {
     },
     //修改按钮状态
     changeIt(val) {
-      updateAnwser(val).then((res) => {
-        if (res.data.retcode === 0) {
-          this.getData();
-          this.$message({ type: "success", message: "修改成功！" });
-        }
-      });
+      const statusMSG = !val.enable?"禁用":"启用";
+      this.$confirm("此操作将<span style='color: red'>"+statusMSG+"</span>"+val.type+", 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        dangerouslyUseHTMLString: true,
+        type: "warning",
+      })
+        .then(() => {
+          updateAnwser(val).then((res) => {
+            if (res.data.retcode === 0) {
+              this.getData();
+              this.$message({ type: "success", message: "修改成功！" });
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消"+statusMSG,
+          });
+          val.enable=!val.enable;
+        });
+
+
     },
     //执行删除操作
     delIt(val) {
-      delAnwser(val.id).then((res) => {
-        console.log(res
-        )
-        if (res.data.retcode === 0) {
-          this.getData();
-          this.$message({type:"success",message:"删除成功"})
-        }
-      });
+      this.$confirm("此操作将永久删除, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          delAnwser(val.id).then((res) => {
+            console.log(res
+            )
+            if (res.data.retcode === 0) {
+              this.getData();
+              this.$message({type:"success",message:"删除成功"})
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
     //添加上传操作
     addUp() {

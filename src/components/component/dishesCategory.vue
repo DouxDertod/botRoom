@@ -1,23 +1,23 @@
 <template>
   <div>
     <el-header>
-      <el-col :span="23" :offset="1" class="titleMsg">菜品分类</el-col>
+      <el-col :span="23" :offset="1" class="titleMsg">菜单分类</el-col>
     </el-header>
     <el-container>
       <el-row>
-        <el-col :span="2" style="margin-bottom: 15px">
-          <el-button type="primary" @click="dialogVisible = true"
+        <el-col :span="2" :offset="1" style="margin-bottom: 15px">
+          <el-button style="width: 100%;" type="primary" @click="dialogVisible = true"
             >添加</el-button
           >
         </el-col>
 
-        <el-col :span="24">
+        <el-col :span="23"  :offset="1" >
           <el-table :data="tableData" border style="width: 100%">
-            <el-table-column
-              align="center"
-              prop="id"
-              label="序号"
-            ></el-table-column>
+            <!--<el-table-column-->
+              <!--align="center"-->
+              <!--prop="id"-->
+              <!--label="序号"-->
+            <!--&gt;</el-table-column>-->
             <el-table-column align="center" prop="name" label="分类名">
             </el-table-column>
             <el-table-column align="center" prop="description" label="分类描述">
@@ -35,7 +35,7 @@
                 <el-button type="danger" size="small" @click="delIt(scope.row)"
                   >删除</el-button
                 >
-               
+
               </template>
             </el-table-column>
           </el-table>
@@ -44,11 +44,11 @@
     </el-container>
 
     <!-- 添加上传弹窗 -->
-    <el-dialog title="分类添加" :visible.sync="dialogVisible" width="35%">
-      <el-form :model="categoryData" :rules="rules" ref="categoryData">
-        <div>
-          <div style="margin: 15px">
-                <el-form-item label="分类名" prop="name" style="width: 250px">
+    <el-dialog title="添加" :visible.sync="dialogVisible" width="35%">
+      <el-form :model="categoryData"  ref="categoryData">
+        <div style="text-align: left ; margin-left: 30px">
+          <div >
+                <el-form-item  label="分类名" prop="name" style="width: 250px">
                   <el-input
                     size="small"
                     style="width: 150px"
@@ -57,7 +57,7 @@
                   >
                   </el-input>
                 </el-form-item>
-                <el-form-item label="排序" style="width: 250px">
+                <el-form-item  label="排序" style="width: 250px">
                   <el-input-number
                           v-model="categoryData.sort"
                           controls-position="right"
@@ -68,7 +68,7 @@
                 </el-form-item>
           </div>
 
-          <div class="demo-input-suffix" style="margin: 15px">
+          <div class="demo-input-suffix" >
             <el-form-item label="描述">
               <el-input
                 type="textarea"
@@ -91,10 +91,11 @@
 
     <!-- 编辑弹窗 -->
     <el-dialog title="编辑" :visible.sync="dialogVisible1" width="35%">
-      <el-form :model="editData" :rules="rules" ref="editData">
-        <div>
-          <div style="margin: 15px">
-                <el-form-item label="分类名" prop="name" style="width: 250px">
+      <el-form :model="editData"  ref="editData">
+        <div style="text-align: left ; margin-left: 30px">
+          <div >
+            <!--label-position="left" label-width="100px"-->
+            <el-form-item label="分类名" prop="name" style="width: 250px">
                   <el-input
                     size="small"
                     style="width: 150px"
@@ -103,7 +104,7 @@
                   >
                   </el-input>
                 </el-form-item>
-                <el-form-item label="排序" style="width: 250px">
+                <el-form-item label="排序"  style="width: 250px">
                   <el-input-number
                           v-model="editData.sort"
                           controls-position="right"
@@ -114,7 +115,7 @@
                 </el-form-item>
           </div>
 
-          <div class="demo-input-suffix" style="margin: 15px">
+          <div class="demo-input-suffix" >
             <el-form-item label="描述">
               <el-input
                 type="textarea"
@@ -155,17 +156,6 @@ export default {
       dialogVisible: false,
       dialogVisible1: false,
       tableData: [],
-      rules: {
-          name: [
-            { required: true, message: '请输入分类名称', trigger: 'blur' },
-          ],
-          sort: [
-            { required: true, message: '请选择活动区域', trigger: 'change' }
-          ],
-          date1: [
-            { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-          ],
-      }
     };
   },
   methods: {
@@ -180,9 +170,12 @@ export default {
         if (valid) {
           let parme = JSON.parse(JSON.stringify(this.editData));
           updateCategory(parme).then(res=>{
-            this.getData();
-            this.dialogVisible1 = false;
-            this.$message({ type: "success", message: "修改成功" });
+            console.log(res)
+            if (res.data.retcode === 0) {
+              this.getData();
+              this.$message({type:"success",message:"修改成功"})
+              this.dialogVisible1 = false;
+            }
           })
         } else {
           console.log('error submit!!');
@@ -202,14 +195,29 @@ export default {
         }
       });
     },
+
+
     //执行删除操作
     delIt(val) {
-      deleteCategory(val.id).then(res=>{
-        if (res.data.retcode === 0) {
-            this.$message({type:"success",message:"删除成功"})
-            this.getData();
-        }
+      this.$confirm("此操作将永久删除, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
       })
+        .then(() => {
+          deleteCategory(val.id).then(res=>{
+            if (res.data.retcode === 0) {
+              this.$message({type:"success",message:"删除成功"})
+              this.getData();
+            }
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
     //添加上传操作
     addUp(formName) {
@@ -221,8 +229,9 @@ export default {
             if (res.retcode === 0) {
               this.getData();
               this.$message({type:"success",message:"添加成功"})
+
+              this.dialogVisible = false;
             }
-            this.dialogVisible = false;
           })
         } else {
           console.log('error submit!!');

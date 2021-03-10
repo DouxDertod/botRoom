@@ -12,7 +12,7 @@
         </el-col> -->
 
       <el-col :span="24">
-        <el-table :data="tableData" style="width: 100%">
+        <el-table :data="tableData" border style="width: 100%">
           <el-table-column
             align="center"
             prop="name"
@@ -29,7 +29,7 @@
 
           <el-table-column align="center" prop="description" label="按钮描述">
           </el-table-column>
-          <el-table-column align="center" label="按钮状态">
+          <el-table-column align="center" label="启用状态">
             <template slot-scope="scope">
               <div>
                 <el-switch
@@ -178,19 +178,38 @@ export default {
         if (res.data.retcode === 0) {
           let data = JSON.parse(res.data.payload);
           this.tableData = data;
-         
+
         }
       });
     },
     //按钮状态修改
     changeIt(val) {
-      let functionButton = val;
-      updataButton(functionButton).then((res) => {
-        if (res.data.retcode === 0) {
-          this.$message({ type: "success", message: "修改成功！" });
-          this.getData();
-        }
-      });
+      const statusMSG = val.enable?"禁用":"启用";
+      this.$confirm("此操作将<span style='color: red'>"+statusMSG+"</span>"+val.name+"按钮, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        dangerouslyUseHTMLString: true,
+        type: "warning",
+      })
+        .then(() => {
+          let functionButton = val;
+          updataButton(functionButton).then((res) => {
+            if (res.data.retcode === 0) {
+              this.$message({ type: "success", message: "修改成功！" });
+              this.getData();
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消"+statusMSG,
+          });
+          val.enable=!val.enable;
+        });
+
+
+
     },
     //执行删除操作
     delIt(val) {},

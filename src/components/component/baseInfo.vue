@@ -66,6 +66,7 @@
           </span>
         </el-col>
         <el-col class="info" :span="23" :offset="1">
+          <el-col :span="24" ><span style="color: red; font-size: 10px">请上传分辨率为[480x480]的图片。</span></el-col>
           <span>图片：</span>
           <span>
             <el-upload
@@ -121,7 +122,7 @@
             >添加</el-button
           >
           <div>
-            <el-table :data="newData" style="width: 100%">
+            <el-table :data="newData" border style="width: 100%;margin-top:15px;">
               <el-table-column prop="type" align="center" label="桌型名称">
               </el-table-column>
               <el-table-column prop="quantity" align="center" label="餐桌数量">
@@ -141,7 +142,7 @@
                 label="桌型描述"
               >
               </el-table-column>
-              <el-table-column prop="name" align="center" label="桌型状态">
+              <el-table-column prop="name" align="center" label="启用状态">
                 <template slot-scope="scope">
                   <div>
                     <el-switch
@@ -188,20 +189,12 @@
             <el-form ref="form" inline size="small" label-width="80px">
               <div style="text-align: left">
                 <el-form-item required label="桌型名称">
-                  <el-select v-model="tableInfo.type" placeholder="请选择">
-                    <el-option label="小桌" value="小桌"></el-option>
-                    <el-option label="中桌" value="中桌"></el-option>
-                    <el-option label="大桌" value="大桌"></el-option>
-                    <el-option label="包间" value="包间"></el-option>
-                  </el-select>
+                  <el-input v-model="tableInfo.type">
+                  </el-input>
                 </el-form-item>
                 <el-form-item required label="桌型标识">
                   <el-select v-model="tableInfo.mark" placeholder="请选择">
-                    <el-option label="A" value="A"></el-option>
-                    <el-option label="B" value="B"></el-option>
-                    <el-option label="C" value="C"></el-option>
-                    <el-option label="D" value="D"></el-option>
-                    <el-option label="E" value="E"></el-option>
+                    <el-option v-for="item in markList" :label=item :value=item></el-option>
                   </el-select>
                 </el-form-item>
               </div>
@@ -212,7 +205,7 @@
                     style="width: 215px"
                   ></el-input>
                 </el-form-item>
-                <el-form-item required label="桌型状态">
+                <el-form-item required label="启用状态">
                   <el-radio-group v-model="tableInfo.status">
                     <el-radio :label="true">启用</el-radio>
                     <el-radio :label="false">关闭</el-radio>
@@ -359,6 +352,7 @@ export default {
       fixIndex: "",
       num: "",
       addRed: [{ required: true }],
+      markList:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
       tableInfo: {
         description: "",
         id: "",
@@ -455,21 +449,52 @@ export default {
     },
     //删除桌型
     delTableType(val) {
-      delTable(val.id).then((res) => {
-        if (res.data.retcode === 0) {
-          this.getData();
-          this.$message({ type: "success", message: res.data.payload });
-        }
+      this.$confirm("此操作将永久删除, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+      .then(() => {
+        delTable(val.id).then((res) => {
+          if (res.data.retcode === 0) {
+            this.getData();
+            this.$message({ type: "success", message: res.data.payload });
+          }
+        });
+      })
+      .catch(() => {
+        this.$message({
+          type: "info",
+          message: "已取消删除",
+        });
       });
+
     },
     //桌型状态按钮
     changeStatu(val) {
-      updataTable(val).then((res) => {
-        if (res.data.retcode === 0) {
-          // this.getData()
-          this.$message({ type: "success", message: "修改成功" });
-        }
-      });
+      const statusMSG = val.status?"启用":"禁用";
+      this.$confirm("此操作将<span style='color: red'>"+statusMSG+"</span>"+val.type+"桌型, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        dangerouslyUseHTMLString: true,
+        type: "warning",
+      })
+        .then(() => {
+          updataTable(val).then((res) => {
+            if (res.data.retcode === 0) {
+              // this.getData()
+              this.$message({ type: "success", message: "修改成功" });
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消"+statusMSG,
+          });
+          val.status=!val.status;
+        });
+
     },
     //页面初始化数据
     getData() {
@@ -512,7 +537,12 @@ export default {
       getTableInfo(parme).then((res) => {
         if (res.data.retcode === 0) {
           let data = JSON.parse(res.data.payload);
+          data.records.forEach((record) => {
+            const idx =this.markList.indexOf(record.mark)
+            this.markList.splice(idx,1);
+          })
           this.newData = data.records;
+
         }
       });
     },
@@ -632,11 +662,25 @@ export default {
     },
     //删除 座位1 或 运营2
     delTable(val, index) {
-      if (val === 1) {
-        this.newData.splice(index, 1);
-      } else {
-        this.timeData.splice(index, 1);
-      }
+      this.$confirm("此操作将永久删除, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          if (val === 1) {
+            this.newData.splice(index, 1);
+          } else {
+            this.timeData.splice(index, 1);
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+
     },
     //修改内容保存
     submitContent(num, data) {
@@ -653,6 +697,10 @@ export default {
           this.baseInfo.businessHours = [];
           //数据格式处理
           for (let i = 0; i < time.length; i++) {
+            if(!time[i].weekStar||!time[i].weekEnd||!time[i].startTime||!time[i].endTime){
+              this.$message({ type: "warning", message: "还有数据未填写" });
+              return
+            }
             let data =
               time[i].weekStar +
               "到" +

@@ -15,7 +15,7 @@
         >
           <el-submenu index="1">
             <template slot="title"
-              ><img src="../assets/img/right2.png"  alt="" /><span
+              ><img src="../assets/img/right2.png"  width="30px"  alt="" /><span
                 >admin</span
               ></template
             >

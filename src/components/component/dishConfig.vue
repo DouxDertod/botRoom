@@ -5,7 +5,7 @@
     </el-header>
     <el-container>
       <el-row>
-        <el-col :span="2" :offset="22" style="margin-bottom: 15px">
+        <el-col :span="2" :offset="1" style="margin-bottom: 15px">
           <el-button style="width: 100%;" type="primary" @click="handleClick('add')">添加</el-button>
         </el-col>
 
@@ -43,7 +43,7 @@
             </el-table-column>
             <el-table-column align="center" prop="price" label="价格">
             </el-table-column>
-            <el-table-column align="center" prop="category" label="菜品分类">
+            <el-table-column align="center" prop="category" label="菜单分类">
             </el-table-column>
             <el-table-column align="center" prop="description" label="菜品描述">
             </el-table-column>
@@ -206,14 +206,10 @@
         :visible.sync="dialogVisible"
         width="30%"
       >
-        <el-row>
+        <el-row  style="text-align: left">
           <div>
-            <el-col :span="22" >
-              <div
-                style="margin-bottom: 5px;text-align: left; font-size: 10px;margin-left: 5%;color:red"
-              >*多种口味或菜谱别名以"、"分隔。图片请上传长宽比为 4:3 的图片</div>
-            </el-col>
-            <el-col :span="12">
+
+            <el-col :span="12" >
               <div
                 class="demo-input-suffix addRedStar"
                 style="margin-bottom: 15px"
@@ -228,7 +224,12 @@
                 </el-input>
               </div>
               <div class="demo-input-suffix" style="margin-bottom: 15px">
-                &emsp;菜品别名
+                <el-col  :span="24" >
+                  <div
+                    style="margin-bottom: 5px;text-align: left; font-size: 10px;margin-left: 5%;color:red"
+                  >*多种菜谱别名以"、"分隔</div>
+                </el-col>
+                &nbsp;&nbsp;&nbsp;菜品别名
                 <el-input
                   style="width: 150px"
                   size="small"
@@ -241,7 +242,7 @@
                 class="demo-input-suffix addRedStar"
                 style="margin-bottom: 15px"
               >
-                价格&emsp;&emsp;
+                &emsp;&emsp;价格
                 <el-input
                   style="width: 150px"
                   size="small"
@@ -251,9 +252,14 @@
                 </el-input>
               </div>
             </el-col>
-            <el-col :span="12" style="text-align: left">
+            <el-col :span="12" >
+              <el-col :span="24" >
+                <div
+                  style="margin-bottom: 5px;text-align: left; font-size: 10px;margin-left: 5%;color:red"
+                >*图片请上传长宽比为 4:3 的图片</div>
+              </el-col>
               <span style="margin-bottom: 15px">
-                <span style="vertical-align: top">&emsp;&emsp;图片</span>
+                <span style="vertical-align: top">&nbsp;&nbsp;&nbsp;图片</span>
                 <el-upload
                   ref="upload"
                   :class="urlList.length >= 1 ? 'hide' : ''"
@@ -312,6 +318,11 @@
                 </div>
               </el-col>
               <el-col :span="12">
+                <el-col :span="24" >
+                  <div
+                    style="margin-bottom: 5px;text-align: left; font-size: 10px;margin-left: 5%;color:red"
+                  >*多种口味以"、"分隔</div>
+                </el-col>
                 <div
                   class="demo-input-suffix addRedStar"
                   style="margin-bottom: 15px"
@@ -329,9 +340,9 @@
             </el-col>
 
             <el-col>
-              <el-col :span="14">
+              <el-col :span="24">
                 <div class="demo-input-suffix" style="margin-bottom: 15px">
-                  &emsp;&nbsp;推荐星级
+                  &nbsp;&nbsp;&nbsp;推荐星级
                   <el-select
                     v-model="dialogData.star"
                     size="small"
@@ -346,7 +357,11 @@
                     >
                     </el-option>
                   </el-select>
-                  <i class="el-rate__icon el-icon-star-on" style="color: rgb(247, 186, 42);"><!----></i>
+                  <el-rate
+                    style="display: inline"
+                    disabled
+                    v-model="dialogData.star"
+                  ></el-rate>
                 </div>
               </el-col>
               <!-- <el-col :span="12">
@@ -371,7 +386,7 @@
               </el-col> -->
               <el-col :span="12">
                 <div class="demo-input-suffix" style="margin-bottom: 15px">
-                  是否新品&emsp;&emsp;
+                  &nbsp;&nbsp;&nbsp;是否新品&emsp;&emsp;
                   <el-radio-group v-model="dialogData.isNew" size="small">
                     <el-radio :label="true">是</el-radio>
                     <el-radio :label="false">否</el-radio>
@@ -391,9 +406,9 @@
             <el-col>
               <div
                 class="demo-input-suffix"
-                style="margin-bottom: 15px; text-align: left; margin-left: 15px"
+                style="margin-bottom: 15px; text-align: left;"
               >
-                <span style="vertical-align: top">&emsp;&nbsp;菜品描述</span>
+                <span style="vertical-align: top">&nbsp;&nbsp;&nbsp;菜品描述</span>
                 <el-input
                   type="textarea"
                   :rows="3"
@@ -444,23 +459,23 @@ export default {
       sortOption: [],
       starOption: [
         {
-          value: "1",
+          value: 1,
           label: "1",
         },
         {
-          value: "2",
+          value: 2,
           label: "2",
         },
         {
-          value: "3",
+          value: 3,
           label: "3",
         },
         {
-          value: "4",
+          value: 4,
           label: "4",
         },
         {
-          value: "5",
+          value: 5,
           label: "5",
         },
       ],
@@ -546,7 +561,7 @@ export default {
       if (this.urlList.length != 0) {
         data.pictures[0] = this.urlList[0].url;
       }
-      //菜品分类查询选择
+      //菜单分类查询选择
       this.sortOption.forEach((element) => {
         if (element.id === data.categoryId) {
           data.category = element.name;

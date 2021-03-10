@@ -46,15 +46,15 @@
           </div>
         </el-col>
         <el-col :span="4" style="margin-bottom: 15px">
-          <div class="demo-input-suffix">排队状态：{{ numTotal }}桌</div>
+          <div class="demo-input-suffix">剩余桌数：{{ numTotal }}桌</div>
         </el-col>
 
         <el-col :span="24">
-          <el-table :data="tableData" style="width: 100%">
+          <el-table :data="tableData" border style="width: 100%">
             <el-table-column
               align="center"
               prop="queueNo"
-              label="序号"
+              label="等位排号"
             ></el-table-column>
             <el-table-column align="center" prop="serialNumber" label="桌号">
             </el-table-column>
@@ -123,9 +123,9 @@
 
 <script>
 import {
-  queryData,
   callNumber,
   getTableInfo,
+  queryData,
   passNumber,
 } from "../../assets/js/api/api";
 export default {
@@ -134,19 +134,10 @@ export default {
     return {
       merchantId: "",
       numTotal: 0,
-      valueQueue: "全部",
-      valueTable: "全部",
-      options: [
-        {
-          table_id: "全部",
-          label: "全部",
-        },
-      ],
+      valueQueue: "0",
+      valueTable: "",
+      options: [],
       options1: [
-        {
-          value: "全部",
-          label: "全部",
-        },
         {
           value: "0",
           label: "排队中",
@@ -169,7 +160,7 @@ export default {
   methods: {
     //叫号 || 过号
     changeIt(data, type) {
-     
+
       if (type === 1) {
         data.status = 1;
         callNumber(data).then((res) => {
@@ -193,6 +184,7 @@ export default {
       let parme = {
         merchant_id: this.merchantId,
       };
+      this.lock=true;
       getTableInfo(parme).then((res) => {
         let data = JSON.parse(res.data.payload);
         data.records.forEach((element) => {
@@ -201,14 +193,20 @@ export default {
           obj.label = element.type;
           this.options.push(obj);
         });
+        if(this.options.length>0){
+          this.valueTable=this.options[0].table_id;
+        }
+
+        this.getData();
       });
     },
     //页面初始化数据||条件查询
     getData() {
+
       let parme = {
         merchant_id: this.merchantId,
         status: this.valueQueue === "全部" ? "" : this.valueQueue,
-        table_id: this.valueTable === "全部" ? "" : this.valueTable,
+        table_id: this.valueTable,
         page_index: this.currentPage,
         page_size: this.pageSize
       };
@@ -255,7 +253,6 @@ export default {
   mounted() {
     this.merchantId = Number(localStorage.getItem("merchantId"));
     this.getTableType();
-    this.getData();
   },
 };
 </script>
