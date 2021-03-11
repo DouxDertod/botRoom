@@ -65,7 +65,7 @@
             >
               <template slot-scope="scope">
                 <el-switch
-                  @change="changeItBtn(scope.row)"
+                  @change="changeItBtn(scope.row,'hot')"
                   v-model="scope.row.hot"
                 >
                 </el-switch>
@@ -74,7 +74,7 @@
             <el-table-column align="center" label="新品" width="65">
               <template slot-scope="scope">
                 <el-switch
-                  @change="changeItBtn(scope.row)"
+                  @change="changeItBtn(scope.row,'isNew')"
                   v-model="scope.row.isNew"
                 >
                 </el-switch>
@@ -573,6 +573,8 @@ export default {
           if (res.retcode === 0) {
             this.getData();
             this.$message({ type: "success", message: "修改成功" });
+
+            this.dialogVisible = false;
           }
         });
       } else {
@@ -580,11 +582,11 @@ export default {
           if (res.data.retcode === 0) {
             this.getData();
             this.$message({ type: "success", message: "修改成功" });
+            this.dialogVisible = false;
           }
         });
       }
       this.urlList = [];
-      this.dialogVisible = false;
     },
     //图片上传
     changeIt(file, fileList) {
@@ -602,13 +604,38 @@ export default {
       });
     },
     //关闭或开启按钮
-    changeItBtn(data) {
-      updataDishes(data).then((res) => {
-        if (res.data.retcode === 0) {
-          this.getData();
-          this.$message({ type: "success", message: "修改成功" });
-        }
-      });
+    changeItBtn(data,flag) {
+      console.log(data)
+      let statusMSG ='';
+      if(flag=='hot')statusMSG = !data.hot?"禁用":"启用";
+      else if (flag=='isNew') statusMSG = !data.isNew?"禁用":"启用";
+
+      this.$confirm("此操作将<span style='color: red'>"+statusMSG+"</span>\""+data.name+"\"为"+(flag=='hot'?'招牌菜':"新菜")+"，是否继续？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        dangerouslyUseHTMLString: true,
+        type: "warning",
+      })
+        .then(() => {
+          updataDishes(data).then((res) => {
+            if (res.data.retcode === 0) {
+              this.getData();
+              this.$message({ type: "success", message: "修改成功" });
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消"+statusMSG,
+          });
+          if(flag=='hot'){
+            data.hot=!data.hot;
+          }else if(flag=="isNew"){
+            data.isNew= !data.isNew;
+          }
+        });
+
     },
     //页面数据初始化
     getData() {
@@ -703,7 +730,7 @@ export default {
 </script>
 
 
-<<style scoped lang="less">
+<style scoped lang="less">
 .hide /deep/.el-upload--picture-card {
   display: none;
 }

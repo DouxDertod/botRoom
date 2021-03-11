@@ -16,7 +16,7 @@
           <el-submenu index="1">
             <template slot="title"
               ><img src="../assets/img/right2.png"  width="30px"  alt="" /><span
-                >admin</span
+                >{{id}}</span
               ></template
             >
             <el-menu-item index="2-1" @click.native="loginOut()"
@@ -36,6 +36,7 @@ export default {
   data() {
     return {
       activeIndex2: "1",
+      id:localStorage.getItem("merchantId")
     };
   },
   methods: {

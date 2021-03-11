@@ -14,6 +14,9 @@
       <el-menu-item index="2">
         <span slot="title">取号管理</span>
       </el-menu-item>
+      <el-menu-item index="8">
+        <span slot="title">菜单分类</span>
+      </el-menu-item>
       <el-menu-item index="3">
         <span slot="title">菜品配置</span>
       </el-menu-item>
@@ -28,9 +31,6 @@
       </el-menu-item>
       <el-menu-item index="7">
         <span slot="title">排队记录</span>
-      </el-menu-item>
-      <el-menu-item index="8">
-        <span slot="title">菜单分类</span>
       </el-menu-item>
     </el-menu>
   </div>

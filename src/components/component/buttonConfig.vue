@@ -11,7 +11,7 @@
           >
         </el-col> -->
 
-      <el-col :span="24">
+      <el-col :span="23" :offset="1">
         <el-table :data="tableData" border style="width: 100%">
           <el-table-column
             align="center"

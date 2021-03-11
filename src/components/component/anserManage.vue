@@ -105,7 +105,7 @@
           </span>
         </div>
 
-        <div class="demo-input-suffix" style="margin: 15px">
+        <div  class="demo-input-suffix" style="margin: 15px">
           <span
             style="vertical-align: top"
             class="addRedStar"
@@ -145,8 +145,8 @@
     </el-dialog>
     <!-- 编辑问答弹窗 -->
     <el-dialog title="编辑" :visible.sync="dialogVisible1" width="40%">
-     <div>
-        <div style="margin: 15px">
+     <div style="text-align: left;margin: 15px">
+        <div>
           <span class="demo-input-suffix addRedStar">
             问题类型
             <span style="width: 350px">
@@ -159,7 +159,7 @@
               </el-input>
               <span
                 class="demo-input-suffix addRedStar"
-                style="margin-left: 15px; width: 120px"
+                style=" width: 120px;margin-top: 15px"
               >
                 启用状态;
                 <el-radio-group v-model="editData.enable">
@@ -171,9 +171,9 @@
           </span>
         </div>
 
-        <div class="demo-input-suffix" style="margin: 15px">
+        <div class="demo-input-suffix" style="margin-top: 15px">
           <span
-            style="vertical-align: top; margin-left: 55px"
+            style="vertical-align: top; "
             class="addRedStar"
             >问题</span
           >
@@ -187,9 +187,9 @@
           >
           </el-input>
         </div>
-        <div class="demo-input-suffix">
+        <div class="demo-input-suffix" style="margin-top: 15px">
           <span
-            style="vertical-align: top; margin-left: 55px"
+            style="vertical-align: top; "
             class="addRedStar"
             >回答</span
           >
