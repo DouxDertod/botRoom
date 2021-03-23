@@ -48,7 +48,7 @@
         <el-col  :span="9" style="margin-bottom: 15px">
           <span
           >
-            活动时间：
+            叫号时间：
 
             <el-date-picker
               @change="conditionChange"
