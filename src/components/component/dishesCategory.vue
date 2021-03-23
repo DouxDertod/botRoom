@@ -170,7 +170,6 @@ export default {
         if (valid) {
           let parme = JSON.parse(JSON.stringify(this.editData));
           updateCategory(parme).then(res=>{
-            console.log(res)
             if (res.data.retcode === 0) {
               this.getData();
               this.$message({type:"success",message:"修改成功"})

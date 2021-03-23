@@ -347,7 +347,6 @@ export default {
     //确定上传
     isOk() {
       let data = JSON.parse(JSON.stringify(this.dialogData));
-      console.log(data)
       if (!data.title) {
         this.$message({ type: "warning", message: "活动名称不能为空" });
         return;
@@ -497,7 +496,6 @@ export default {
         this.avtiveVaule.push("enableQueue");
       }
       this.dialogVisible = true;
-      console.log(this.dialogData)
     },
     //执行删除操作
     delIt(val) {

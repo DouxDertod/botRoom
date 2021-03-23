@@ -125,8 +125,8 @@
             <el-table :data="newData" border style="width: 100%;margin-top:15px;">
               <el-table-column prop="type" align="center" label="桌型名称">
               </el-table-column>
-              <el-table-column prop="quantity" align="center" label="餐桌数量">
-              </el-table-column>
+              <!--<el-table-column prop="quantity" align="center" label="餐桌数量">-->
+              <!--</el-table-column>-->
               <el-table-column prop="mark" align="center" label="桌型标识">
               </el-table-column>
               <el-table-column prop="name" align="center" label="人数">
@@ -185,7 +185,7 @@
       <!-- 座位情况弹窗 -->
       <el-dialog :title="dialogTitle" :visible.sync="dialogVisible1" width="35%">
         <span>
-          <div>
+          <el-row>
             <el-form ref="form" inline size="small" label-width="80px">
               <div style="text-align: left">
                 <el-form-item required label="桌型名称">
@@ -199,12 +199,12 @@
                 </el-form-item>
               </div>
               <div style="text-align: left">
-                <el-form-item required label="餐桌数量">
-                  <el-input
-                    v-model="tableInfo.quantity"
-                    style="width: 215px"
-                  ></el-input>
-                </el-form-item>
+                <!--<el-form-item required label="餐桌数量">-->
+                  <!--<el-input-->
+                    <!--v-model="tableInfo.quantity"-->
+                    <!--style="width: 215px"-->
+                  <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item required label="启用状态">
                   <el-radio-group v-model="tableInfo.status">
                     <el-radio :label="true">启用</el-radio>
@@ -224,17 +224,18 @@
                   ></el-input>
                 </el-form-item>
               </div>
-              <div style="text-align: left">
-                <el-form-item required label="桌型描述">
+              <el-col  style="text-align: left">
+                <el-form-item  label="桌型描述">
                   <el-input
                     v-model="tableInfo.description"
                     type="textarea"
-                    style="width: 500px"
+                    size="large"
+                    style="width:500px"
                   ></el-input>
                 </el-form-item>
-              </div>
+              </el-col>
             </el-form>
-          </div>
+          </el-row>
         </span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible1 = false">取 消</el-button>

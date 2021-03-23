@@ -605,7 +605,6 @@ export default {
     },
     //关闭或开启按钮
     changeItBtn(data,flag) {
-      console.log(data)
       let statusMSG ='';
       if(flag=='hot')statusMSG = !data.hot?"禁用":"启用";
       else if (flag=='isNew') statusMSG = !data.isNew?"禁用":"启用";

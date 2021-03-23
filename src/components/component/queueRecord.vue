@@ -9,7 +9,7 @@
           <div class="demo-input-suffix">
             桌型：
             <el-select
-              @change="getData"
+              @change="conditionChange"
               v-model="valueTable"
               style="width: 120px"
               size="small"
@@ -29,7 +29,7 @@
           <div class="demo-input-suffix">
             排队状态：
             <el-select
-              @change="getData"
+              @change="conditionChange"
               v-model="valueQueue"
               style="width: 120px"
               size="small"
@@ -44,6 +44,25 @@
               </el-option>
             </el-select>
           </div>
+        </el-col>
+        <el-col  :span="9" style="margin-bottom: 15px">
+          <span
+          >
+            活动时间：
+
+            <el-date-picker
+              @change="conditionChange"
+              popper-class="customPopper"
+              size="small"
+              style="width:250px"
+              v-model="valueTime"
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            >
+            </el-date-picker>
+          </span>
         </el-col>
         <el-col :span="4" style="margin-bottom: 15px">
           <div class="demo-input-suffix">剩余桌数：{{ numTotal }}桌</div>
@@ -128,6 +147,7 @@ import {
   queryData,
   passNumber,
 } from "../../assets/js/api/api";
+import utils from "../../assets/js/utils/filter";
 export default {
   name: "home",
   data() {
@@ -136,6 +156,7 @@ export default {
       numTotal: 0,
       valueQueue: "0",
       valueTable: "",
+      valueTime: [new Date(), new Date()],
       options: [],
       options1: [
         {
@@ -158,6 +179,7 @@ export default {
     };
   },
   methods: {
+
     //叫号 || 过号
     changeIt(data, type) {
 
@@ -200,6 +222,8 @@ export default {
         this.getData();
       });
     },
+
+
     //页面初始化数据||条件查询
     getData() {
 
@@ -208,7 +232,9 @@ export default {
         status: this.valueQueue === "全部" ? "" : this.valueQueue,
         table_id: this.valueTable,
         page_index: this.currentPage,
-        page_size: this.pageSize
+        page_size: this.pageSize,
+        start_time:this.valueTime?utils.formatDate(this.valueTime[0]):'',
+        end_time : this.valueTime?utils.formatDate(this.valueTime[1]):'',
       };
       queryData(parme).then((res) => {
         if (res.data.retcode === 0) {
@@ -223,6 +249,11 @@ export default {
           });
         }
       });
+    },
+
+    conditionChange(){
+      this.currentPage=1;
+      this.getData();
     },
     //返回排队状态
     getStatu(val) {

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import login from '@/components/login.vue'
+import changePwd from '@/components/changePwd.vue'
 import baseInfo from '@/components/component/baseInfo.vue'
 import accessManage from '@/components/component/accessManage.vue'
 import dishConfig from '@/components/component/dishConfig.vue'
@@ -16,12 +17,16 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    { 
+    {
       path: '/',
       name: 'login',
       component: login
+    },{
+      path: '/changePwd',
+      name: 'changePwd',
+      component: changePwd
     },
-    { 
+    {
       path: '/baseInfo',
       name: 'baseInfo',
       component: baseInfo

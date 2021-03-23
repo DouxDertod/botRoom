@@ -24,9 +24,9 @@ export const delTable = parme => DELETE("/api/v1/table/" + parme);
 
 //菜品配置
 //查找菜品
-export const getDishes = parme => 
+export const getDishes = parme =>
   get("/api/v1/dishes?merchant_id=" + parme.merchant_id +
-    "&page_index=" + parme.page_index + 
+    "&page_index=" + parme.page_index +
     "&page_size=" + parme.page_size
   );
 
@@ -54,9 +54,9 @@ export const createCategory = parme => post("/api/v1/dishes_category", parme);
 
 //活动配置部分接口=》
 //活动查询
-export const getAllActive = parme => 
+export const getAllActive = parme =>
   get("/api/v1/activities?merchant_id=" + parme.merchant_id +
-    "&page_index=" + parme.page_index + 
+    "&page_index=" + parme.page_index +
     "&page_size=" + parme.page_size
   );
 
@@ -71,9 +71,9 @@ export const delActive = parme => DELETE("/api/v1/activity/" + parme);
 
 //问答管理接口=》
 //查询问答
-export const queryAnwser = parme => 
-  get("/api/v1/services?merchant_id=" + parme.merchant_id + 
-    "&page_index=" + parme.page_index + 
+export const queryAnwser = parme =>
+  get("/api/v1/services?merchant_id=" + parme.merchant_id +
+    "&page_index=" + parme.page_index +
     "&page_size=" + parme.page_size
   );
 
@@ -113,7 +113,11 @@ export const queryData = parme =>
       "&page_index=" +
       parme.page_index +
       "&page_size=" +
-      parme.page_size
+      parme.page_size+
+    "&start_time=" +
+    parme.start_time+
+    "&end_time=" +
+    parme.end_time
   );
 
 //叫号更换
@@ -128,6 +132,12 @@ export const getLogin = parme => post("/admin/login",parme)
 
 //退出登录
 export const exitLogin =parme => get("/admin/logout",parme)
+
+//修改密码
+export const changePassword =parme => put("/admin/merchant/password",parme)
+
+//获取验证码
+export const getCaptcha =parme => get("/admin/v_code?uid="+parme.id);
 
 //获取商家信息
 export const getMerchant = parme => get("/api/v1/merchant",parme)

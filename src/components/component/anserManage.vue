@@ -6,7 +6,7 @@
     <el-container>
       <el-row>
         <el-col :span="2" :offset="1"  style="margin-bottom: 15px">
-          <el-button type="primary" style="width:100%" @click="dialogVisible = true"
+          <el-button type="primary" style="width:100%" @click="openDialog('add')"
             >添加</el-button
           >
         </el-col>
@@ -29,6 +29,15 @@
             </el-table-column>
 
             <el-table-column align="center" prop="reply" label="回答">
+            </el-table-column>
+            <el-table-column align="center" prop="image" label="图片">
+              <template slot-scope="scope">
+                <el-image
+                  style="width: 80px; height: 80px; margin: 0 auto"
+                  :src="scope.row.imgSrc"
+                >
+                </el-image>
+              </template>
             </el-table-column>
             <el-table-column align="center" label="启用状态">
               <template slot-scope="scope">
@@ -72,40 +81,81 @@
     </div>
 
     <!-- 添加上传弹窗 -->
-    <el-dialog title="添加" :visible.sync="dialogVisible" width="35%" >
-      <div  style="text-align: left">
-        <div  style="margin: 15px" >
-          <span class="demo-input-suffix addRedStar">问题类型
-            <span style="width: 350px">
-              <el-select
-                v-model="answerData.type"
-                size="small"
-                style="width: 150px"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="item in QAOption"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select>
-              <span
-                class="demo-input-suffix addRedStar"
-                style="margin-left: 15px; width: 120px"
-              >
-                启用状态 &emsp;
+    <el-dialog title="添加" :visible.sync="dialogVisible" @close='cancel()' width="35%" >
+      <el-row  style="text-align: left">
+        <el-col  :span="10" style="margin: 15px" >
+          <el-row>
+            <el-col>
+              <span class="demo-input-suffix addRedStar">问题类型
+                <span style="width: 350px">
+                  <el-select
+                    v-model="answerData.type"
+                    size="small"
+                    style="width: 150px"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in QAOption"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                    </el-option>
+                  </el-select>
+                </span>
+              </span>
+            </el-col>
+            <el-col style="margin-top: 25px;">
+               <span
+                 class="demo-input-suffix addRedStar"
+                 style=" width: 120px"
+               >启用状态
                 <el-radio-group v-model="answerData.enable">
                   <el-radio :label="true">开启</el-radio>
                   <el-radio :label="false">关闭</el-radio>
                 </el-radio-group>
               </span>
-            </span>
-          </span>
-        </div>
-
-        <div  class="demo-input-suffix" style="margin: 15px">
+            </el-col>
+          </el-row>
+        </el-col>
+        <el-col :offset="1" :span="11" style="text-align: left">
+              <span style="margin-bottom: 15px">
+                <span style="vertical-align: top">图片：</span>
+                <el-upload
+                  ref="upload"
+                  :on-change="changeImg"
+                  :class="urlList.length >= 1 ? 'hideUpload' : ''"
+                  :file-list="urlList"
+                  style="display: inline-block"
+                  action="#"
+                  :auto-upload="false"
+                  list-type="picture-card"
+                >
+                  <i class="el-icon-plus"></i>
+                  <div
+                    style="display: inline"
+                    slot="file"
+                    slot-scope="{ file }"
+                    class="upload"
+                  >
+                    <img
+                      class="el-upload-list__item-thumbnail"
+                      :src="file.url"
+                      alt=""
+                    />
+                    <span class="el-upload-list__item-actions">
+                      <span
+                        class="el-upload-list__item-delete"
+                        @click="updataImg(file)"
+                      >
+                        <i class="el-icon-edit-outline"></i>
+                      </span>
+                    </span>
+                  </div>
+                </el-upload>
+              </span>
+        </el-col>
+        <el-col  class="demo-input-suffix" style="margin: 15px">
           <span
             style="vertical-align: top"
             class="addRedStar"
@@ -115,13 +165,13 @@
             type="textarea"
             :rows="3"
             size="small"
-            style="width: 380px"
+            style="width: 80%"
             placeholder="问题"
             v-model="answerData.question"
           >
           </el-input>
-        </div>
-        <div class="demo-input-suffix" style="margin: 15px">
+        </el-col>
+        <el-col class="demo-input-suffix" style="margin: 15px">
           <span
             style="vertical-align: top"
             class="addRedStar"
@@ -131,81 +181,131 @@
             size="small"
             type="textarea"
             :rows="3"
-            style="width: 380px"
+            style="width: 80%"
             placeholder="回答"
             v-model="answerData.reply"
           >
           </el-input>
-        </div>
-      </div>
+        </el-col>
+      </el-row>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="cancel()">取 消</el-button>
         <el-button type="primary" @click="addUp()">确 定</el-button>
       </span>
     </el-dialog>
+
+
     <!-- 编辑问答弹窗 -->
-    <el-dialog title="编辑" :visible.sync="dialogVisible1" width="40%">
-     <div style="text-align: left;margin: 15px">
-        <div>
-          <span class="demo-input-suffix addRedStar">
-            问题类型
-            <span style="width: 350px">
-              <el-input
-                size="small"
-                style="width: 150px"
-                placeholder="问题类型"
-                v-model="editData.type"
-              >
-              </el-input>
-              <span
-                class="demo-input-suffix addRedStar"
-                style=" width: 120px;margin-top: 15px"
-              >
-                启用状态;
+    <el-dialog title="编辑" :visible.sync="dialogVisible1"  @close='cancel()'width="40%">
+      <el-row  style="text-align: left">
+        <el-col  :span="10" style="margin: 15px" >
+          <el-row>
+            <el-col>
+              <span class="demo-input-suffix addRedStar">问题类型
+                <span style="width: 350px">
+                  <el-select
+                    v-model="editData.type"
+                    size="small"
+                    style="width: 150px"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in QAOption"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                    </el-option>
+                  </el-select>
+                </span>
+              </span>
+            </el-col>
+            <el-col style="margin-top: 25px;">
+               <span
+                 class="demo-input-suffix addRedStar"
+                 style=" width: 120px"
+               >启用状态
                 <el-radio-group v-model="editData.enable">
                   <el-radio :label="true">开启</el-radio>
                   <el-radio :label="false">关闭</el-radio>
                 </el-radio-group>
               </span>
-            </span>
-          </span>
-        </div>
-
-        <div class="demo-input-suffix" style="margin-top: 15px">
+            </el-col>
+          </el-row>
+        </el-col>
+        <el-col :offset="1" :span="11" style="text-align: left">
+              <span style="margin-bottom: 15px">
+                <span style="vertical-align: top">图片：</span>
+                <el-upload
+                  ref="upload"
+                  :on-change="changeImg"
+                  :class="urlList.length >= 1 ? 'hideUpload' : ''"
+                  :file-list="urlList"
+                  style="display: inline-block"
+                  action="#"
+                  :auto-upload="false"
+                  list-type="picture-card"
+                >
+                  <i class="el-icon-plus"></i>
+                  <div
+                    style="display: inline"
+                    slot="file"
+                    slot-scope="{ file }"
+                    class="upload"
+                  >
+                    <img
+                      class="el-upload-list__item-thumbnail"
+                      :src="file.url"
+                      alt=""
+                    />
+                    <span class="el-upload-list__item-actions">
+                      <span
+                        class="el-upload-list__item-delete"
+                        @click="updataImg(file)"
+                      >
+                        <i class="el-icon-edit-outline"></i>
+                      </span>
+                    </span>
+                  </div>
+                </el-upload>
+              </span>
+        </el-col>
+        <el-col  class="demo-input-suffix" style="margin: 15px">
           <span
-            style="vertical-align: top; "
+            style="vertical-align: top"
             class="addRedStar"
-            >问题</span
+          >问题</span
           >
           <el-input
             type="textarea"
             :rows="3"
             size="small"
-            style="width: 380px"
+            style="width: 80%"
             placeholder="问题"
             v-model="editData.question"
           >
           </el-input>
-        </div>
-        <div class="demo-input-suffix" style="margin-top: 15px">
+        </el-col>
+        <el-col class="demo-input-suffix" style="margin: 15px">
           <span
-            style="vertical-align: top; "
+            style="vertical-align: top"
             class="addRedStar"
-            >回答</span
+          >回答</span
           >
           <el-input
             size="small"
             type="textarea"
             :rows="3"
-            style="width: 380px"
+            style="width: 80%"
             placeholder="回答"
             v-model="editData.reply"
           >
           </el-input>
-        </div>
-      </div>
+        </el-col>
+      </el-row>
+
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible1 = false">取 消</el-button>
+        <el-button @click="cancel()">取 消</el-button>
         <el-button type="primary" @click="editUp()">确 定</el-button>
       </span>
     </el-dialog>
@@ -218,13 +318,16 @@ import {
   createAnwser,
   updateAnwser,
   delAnwser,
+  upImg,
 } from "../../assets/js/api/api";
 export default {
   name: "home",
   data() {
     return {
+      showUpload: true,
       merchantId:"",
       fileList: [],
+      urlList: [],
       QAOption: [
         {
           value: "设施问题",
@@ -250,16 +353,30 @@ export default {
     };
   },
   methods: {
+    openDialog(flag,data){
+
+      if(flag==='add'){
+        this.urlList=[];
+        this.dialogVisible = true;
+      }
+
+    },
     //编辑问答
     editAnwser(val) {
-      this.dialogVisible1 = true;
+      let obj = new Object();
+      obj.url = val.imgSrc;
+      this.urlList=[]
+      this.urlList.push(obj);
       this.editData = JSON.parse(JSON.stringify(val));
       this.editData.question = val.question.join("、");
+      this.dialogVisible1 = true;
+
     },
     //问答编辑提交
     editUp() {
       let parme = JSON.parse(JSON.stringify(this.editData));
       parme.question = parme.question.split("、");
+      parme.imgSrc = this.urlList[0].url;
       updateAnwser(parme).then((res) => {
         if (res.data.retcode === 0) {
           this.getData();
@@ -267,6 +384,11 @@ export default {
           this.$message({ type: "success", message: "修改成功" });
         }
       });
+    },
+    cancel() {
+      this.urlList = [];
+      this.dialogVisible = false;
+      this.dialogVisible1 = false;
     },
     //初始化数据
     getData() {
@@ -319,8 +441,6 @@ export default {
       })
         .then(() => {
           delAnwser(val.id).then((res) => {
-            console.log(res
-            )
             if (res.data.retcode === 0) {
               this.getData();
               this.$message({type:"success",message:"删除成功"})
@@ -334,12 +454,13 @@ export default {
           });
         });
     },
+
     //添加上传操作
     addUp() {
       let parme = JSON.parse(JSON.stringify(this.answerData));
       parme.question = parme.question.split("、");
       parme.merchantId=this.merchantId;
-
+      parme.imgSrc = this.urlList[0].url;
       createAnwser(parme).then((res) => {
         if (res.retcode === 0) {
           this.getData();
@@ -351,6 +472,29 @@ export default {
     //添加上传 删除操作
     delItem(index) {
       this.answerData.splice(index, 1);
+    },
+    //更新图片
+    updataImg(file) {
+      this.$refs.upload.$refs["upload-inner"].handleClick(); //调用文件上传窗口
+
+    },
+    //图片上传
+    changeImg(file, fileList) {
+      this.showUpload = false;
+      const formData = new FormData();
+      formData.append("multipartFile", file.raw);
+      upImg(formData).then((res) => {
+        if (res.retcode === 0) {
+          let data = JSON.parse(res.payload);
+          //只显示一张图片 先替换
+          // if (this.urlList.length !== 0) {
+          let obj = new Object();
+          obj.url = data.imageUrl;
+          this.urlList=[obj];
+          // }
+          this.$message({ type: "success", message: "上传成功" });
+        }
+      });
     },
     //新增数据操作
     addData() {
@@ -372,9 +516,10 @@ export default {
   },
 };
 </script>
-
-
 <style scoped lang="less">
+  .hideUpload  /deep/ div{
+    display: none;
+  }
 /deep/.el-header {
   margin-top: 30px;
   padding: 0px;
@@ -383,5 +528,10 @@ export default {
   text-align: left;
   font-size: 18px;
   font-weight: bold;
+}
+/deep/.el-upload--picture-card {
+  width: 128px;
+  height: 128px;
+  line-height: 128px;
 }
 </style>

@@ -19,6 +19,9 @@
                 >{{id}}</span
               ></template
             >
+            <el-menu-item index="2-1" @click.native="changePwd()"
+            >修改密码</el-menu-item
+            >
             <el-menu-item index="2-1" @click.native="loginOut()"
               >退出登录</el-menu-item
             >
@@ -52,6 +55,9 @@ export default {
           this.$router.push("/");
         }
       });
+    },
+    changePwd(){
+      this.$router.push("/changePwd")
     },
   },
 };
