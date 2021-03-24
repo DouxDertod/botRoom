@@ -376,7 +376,7 @@ export default {
     editUp() {
       let parme = JSON.parse(JSON.stringify(this.editData));
       parme.question = parme.question.split("、");
-      parme.imgSrc = this.urlList[0].url;
+      if(this.urlList.length>0)parme.imgSrc = this.urlList[0].url;
       updateAnwser(parme).then((res) => {
         if (res.data.retcode === 0) {
           this.getData();
@@ -389,6 +389,8 @@ export default {
       this.urlList = [];
       this.dialogVisible = false;
       this.dialogVisible1 = false;
+      this.answerData= { reply: "", question: "", type: "", enable: false };
+      this.editData= {}
     },
     //初始化数据
     getData() {
@@ -460,7 +462,7 @@ export default {
       let parme = JSON.parse(JSON.stringify(this.answerData));
       parme.question = parme.question.split("、");
       parme.merchantId=this.merchantId;
-      parme.imgSrc = this.urlList[0].url;
+      if(this.urlList.length>0)parme.imgSrc = this.urlList[0].url;
       createAnwser(parme).then((res) => {
         if (res.retcode === 0) {
           this.getData();
