@@ -150,15 +150,26 @@ import {
 import utils from "../../assets/js/utils/filter";
 export default {
   name: "home",
+  today:new Date(),
   data() {
     return {
       merchantId: "",
       numTotal: 0,
-      valueQueue: "0",
-      valueTable: "",
-      valueTime: [new Date(), new Date()],
-      options: [],
+      valueQueue: "全部",
+      valueTable: "全部",
+
+      valueTime: [ new Date- 24*60*60*1000, new Date()],
+      options: [
+        {
+          table_id: "全部",
+          label: "全部",
+        },
+      ],
       options1: [
+        {
+          value: "全部",
+          label: "全部",
+        },
         {
           value: "0",
           label: "排队中",
@@ -230,7 +241,7 @@ export default {
       let parme = {
         merchant_id: this.merchantId,
         status: this.valueQueue === "全部" ? "" : this.valueQueue,
-        table_id: this.valueTable,
+        table_id: this.valueTable === "全部" ? "" : this.valueTable,
         page_index: this.currentPage,
         page_size: this.pageSize,
         start_time:this.valueTime?utils.formatDate(this.valueTime[0]):'',
