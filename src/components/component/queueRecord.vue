@@ -158,7 +158,7 @@ export default {
       valueQueue: "全部",
       valueTable: "全部",
 
-      valueTime: [ new Date- 24*60*60*1000, new Date()],
+      valueTime: [new Date(new Date().setDate(0)).setHours(23,59,59),new Date().setHours(23,59,59) ],
       options: [
         {
           table_id: "全部",
@@ -293,6 +293,7 @@ export default {
     }
   },
   mounted() {
+
     this.merchantId = Number(localStorage.getItem("merchantId"));
     this.getTableType();
   },
