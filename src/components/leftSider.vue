@@ -29,8 +29,8 @@
       <el-menu-item index="6">
         <span slot="title">按钮配置</span>
       </el-menu-item>
-      <el-menu-item index="7">
-        <span slot="title">排队记录</span>
+      <el-menu-item index="9">
+        <span slot="title">排队管理</span>
       </el-menu-item>
     </el-menu>
   </div>
@@ -80,6 +80,9 @@ export default {
           break;
         case "8":
           this.$router.push({ path: "/dishesCategory" });
+          break;
+        case "9":
+          this.$router.push({ path: "/queueManage" });
           break;
       }
     },

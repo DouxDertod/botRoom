@@ -25,7 +25,7 @@
             </el-select>
           </div>
         </el-col>
-        <el-col :span="6" style="margin-bottom: 15px">
+        <el-col :span="5" style="margin-bottom: 15px">
           <div class="demo-input-suffix">
             排队状态：
             <el-select
@@ -45,7 +45,7 @@
             </el-select>
           </div>
         </el-col>
-        <el-col  :span="9" style="margin-bottom: 15px">
+        <el-col  :span="8" style="margin-bottom: 15px">
           <span
           >
             叫号时间：
@@ -64,8 +64,11 @@
             </el-date-picker>
           </span>
         </el-col>
-        <el-col :span="4" style="margin-bottom: 15px">
+        <el-col :span="3" style="margin-bottom: 15px">
           <div class="demo-input-suffix">剩余桌数：{{ numTotal }}桌</div>
+        </el-col>
+        <el-col :span="3" style="margin-bottom: 15px">
+          <el-button  size="mini" type="primary" @click="reDirect()">排队管理</el-button>
         </el-col>
 
         <el-col :span="23" :offset="1">
@@ -99,29 +102,29 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              align="center"
-              prop="address"
-              label="操作"
-              width="150"
-            >
-              <template slot-scope="scope">
-                <el-button
-                  :disabled="scope.row.status === 1 || scope.row.status === -1"
-                  type="primary"
-                  size="small"
-                  @click="changeIt(scope.row, 1)"
-                  >叫号</el-button
-                >
-                <el-button
-                  :disabled="scope.row.status === -1 || scope.row.status === 0"
-                  @click="changeIt(scope.row, 2)"
-                  size="small"
-                  type="danger"
-                  >过号</el-button
-                >
-              </template>
-            </el-table-column>
+            <!--<el-table-column-->
+              <!--align="center"-->
+              <!--prop="address"-->
+              <!--label="操作"-->
+              <!--width="150"-->
+            <!--&gt;-->
+              <!--<template slot-scope="scope">-->
+                <!--<el-button-->
+                  <!--:disabled="scope.row.status === 1 || scope.row.status === -1"-->
+                  <!--type="primary"-->
+                  <!--size="small"-->
+                  <!--@click="changeIt(scope.row, 1)"-->
+                  <!--&gt;叫号</el-button-->
+                <!--&gt;-->
+                <!--<el-button-->
+                  <!--:disabled="scope.row.status === -1 || scope.row.status === 0"-->
+                  <!--@click="changeIt(scope.row, 2)"-->
+                  <!--size="small"-->
+                  <!--type="danger"-->
+                  <!--&gt;过号</el-button-->
+                <!--&gt;-->
+              <!--</template>-->
+            <!--</el-table-column>-->
           </el-table>
         </el-col>
       </el-row>
@@ -158,7 +161,7 @@ export default {
       valueQueue: "全部",
       valueTable: "全部",
 
-      valueTime: [new Date(new Date().setDate(0)).setHours(23,59,59),new Date().setHours(23,59,59) ],
+      valueTime: [new Date(new Date().setHours(23,59,59)).setDate(new Date().getDate()-1),new Date().setHours(23,59,59) ],
       options: [
         {
           table_id: "全部",
@@ -192,25 +195,30 @@ export default {
   methods: {
 
     //叫号 || 过号
-    changeIt(data, type) {
+    // changeIt(data, type) {
+    //
+    //   if (type === 1) {
+    //     data.status = 1;
+    //     callNumber(data).then((res) => {
+    //       if (res.data.retcode === 0) {
+    //         this.$message({ type: "success", message: "操作成功" });
+    //         this.getData();
+    //       }
+    //     });
+    //   } else {
+    //     data.status = -1;
+    //     passNumber(data).then((res) => {
+    //       if (res.data.retcode === 0) {
+    //         this.$message({ type: "success", message: "操作成功" });
+    //         this.getData();
+    //       }
+    //     });
+    //   }
+    // },
 
-      if (type === 1) {
-        data.status = 1;
-        callNumber(data).then((res) => {
-          if (res.data.retcode === 0) {
-            this.$message({ type: "success", message: "操作成功" });
-            this.getData();
-          }
-        });
-      } else {
-        data.status = -1;
-        passNumber(data).then((res) => {
-          if (res.data.retcode === 0) {
-            this.$message({ type: "success", message: "操作成功" });
-            this.getData();
-          }
-        });
-      }
+    //跳转
+    reDirect(){
+      this.$router.push("/queueManage");
     },
     //桌型查询
     getTableType() {

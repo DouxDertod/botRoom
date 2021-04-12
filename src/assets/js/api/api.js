@@ -120,6 +120,9 @@ export const queryData = parme =>
     parme.end_time
   );
 
+//查询排队情况
+export const querySchedule = parme =>get("/api/v1/queue_schedule?merchant_id=" +parme.merchant_id  );
+
 //叫号更换
 export const callNumber = parme => put("/api/v1/queue", parme);
 

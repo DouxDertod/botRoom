@@ -5,16 +5,7 @@
     </el-header>
     <el-container>
       <el-row>
-        <el-col :span="23" :offset="1" style="text-align: left; padding: 10px 0">
-          开启取号服务
-          <span style="margin-left: 25px">
-            <el-radio-group @change="changeIt" v-model="dataList.queue">
-              <el-radio :label="true">开启</el-radio>
-              <el-radio :label="false">关闭</el-radio>
-            </el-radio-group>
-          </span>
-          <el-divider></el-divider>
-        </el-col>
+
         <!-- ----------- -->
         <el-col :span="23" :offset="1" style="text-align: left; padding: 10px 0">
           用户等位时，是否开启菜单推荐

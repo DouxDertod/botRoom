@@ -9,6 +9,7 @@ import activityConfig from '@/components/component/activityConfig.vue'
 import anserManage from '@/components/component/anserManage.vue'
 import buttonConfig from "@/components/component/buttonConfig.vue"
 import queueRecord from "@/components/component/queueRecord.vue"
+import queueManage from "@/components/component/queueManage.vue"
 import dishesCategory from "@/components/component/dishesCategory.vue"
 // import leftSider from '@/components/leftSider'
 // import topNav from '@/components/topNav'
@@ -64,6 +65,10 @@ export default new Router({
       path: '/dishesCategory',
       name: 'dishesCategory',
       component: dishesCategory
+    },{
+      path: '/queueManage',
+      name: 'queueManage',
+      component: queueManage
     },
   ]
 })
