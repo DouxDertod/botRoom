@@ -9,12 +9,12 @@
         <el-col :span="12" :offset="1" style="text-align: left; padding: 10px 0">
           开启取号服务
             <el-radio-group @change="switchQueueService" v-model="dataList.queue">
-              <el-radio :label="true">开启</el-radio>
+              <el-radio :label="'true'">开启</el-radio>
               <el-tooltip class="item" effect="light" content="关闭后会将当前未叫号的号码设置成已过号。" placement="top-start">
-                <el-radio :label="false">关闭</el-radio>
+                <el-radio :label="'false'">关闭</el-radio>
               </el-tooltip>
               <el-tooltip class="item" effect="light" content="暂停不会改变叫号状态。" placement="top-start">
-                <el-radio :label="pause">暂停</el-radio>
+                <el-radio :label="'pause'">暂停</el-radio>
               </el-tooltip>
 
             </el-radio-group>
