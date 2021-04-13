@@ -107,10 +107,11 @@ export default {
     // 叫号
     callNumberBtn(item){
       this.callNumLoading=true;
-      if(!item.currentSerialNumber||item.currentSerialNumber=="null"){}
-      else {
-        this.passNumberBtn(item);
-      }
+      // 自动过当前号
+      // if(!item.currentSerialNumber||item.currentSerialNumber=="null"){}
+      // else {
+      //   this.passNumberBtn(item);
+      // }
       const data = {
         merchantId:this.merchantId,
         tableId:item.tableId,
