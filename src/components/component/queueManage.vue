@@ -122,7 +122,10 @@ export default {
           this.$message({ type: "success", message:item.nextSerialNumber+ " 叫号成功" });
           this.getData();
         }
-        this.callNumLoading=false;
+        setTimeout(() => {
+          this.callNumLoading=false;
+        }, 2000);
+
       });
     },
     // 过号
@@ -139,7 +142,10 @@ export default {
           this.$message({ type: "success", message:item.currentSerialNumber+ "过号成功" });
           this.getData();
         }
-        this.passNumLoading=false;
+
+        setTimeout(() => {
+          this.passNumLoading=false;
+        }, 2000);
       });
     },
     //跳转
