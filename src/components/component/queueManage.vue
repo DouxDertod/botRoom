@@ -5,7 +5,7 @@
     </el-header>
     <el-container>
 
-      <el-row style="width: 100%" >
+      <el-row style="width: 100%" v-loading="passNumLoading|| callNumLoading" >
         <el-col :span="12" :offset="1" style="text-align: left; padding: 10px 0">
           开启取号服务
             <el-radio-group @change="switchQueueService" v-model="dataList.queue">
@@ -37,7 +37,7 @@
           </el-card>
         </el-col>
 
-        <div >
+        <div  >
           <el-col :span="11" :offset="1"  v-for="item in dataSchedule" style="margin-top: 10px"  >
             <el-card class="box-card" shadow="never" >
 
@@ -88,6 +88,8 @@ export default {
       dataList: {},
       dataSchedule:[],
       merchantId:'',
+      callNumLoading:false,
+      passNumLoading:false,
     };
   },
   methods: {
@@ -104,6 +106,7 @@ export default {
 
     // 叫号
     callNumberBtn(item){
+      this.callNumLoading=true;
       if(!item.currentSerialNumber||item.currentSerialNumber=="null"){}
       else {
         this.passNumberBtn(item);
@@ -119,10 +122,12 @@ export default {
           this.$message({ type: "success", message:item.nextSerialNumber+ " 叫号成功" });
           this.getData();
         }
+        this.callNumLoading=false;
       });
     },
     // 过号
     passNumberBtn(item){
+      this.passNumLoading=true;
       const data = {
         merchantId:this.merchantId,
         tableId:item.tableId,
@@ -134,6 +139,7 @@ export default {
           this.$message({ type: "success", message:item.currentSerialNumber+ "过号成功" });
           this.getData();
         }
+        this.passNumLoading=false;
       });
     },
     //跳转
