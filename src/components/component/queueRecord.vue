@@ -161,7 +161,7 @@ export default {
       valueQueue: "全部",
       valueTable: "全部",
 
-      valueTime: [new Date(new Date().setHours(23,59,59)).setDate(new Date().getDate()-1),new Date().setHours(23,59,59) ],
+      valueTime: [new Date().setHours(0,0,0),new Date().setHours(23,59,59) ],
       options: [
         {
           table_id: "全部",
