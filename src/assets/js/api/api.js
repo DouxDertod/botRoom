@@ -93,6 +93,11 @@ export const queryQueue = parme => get("/api/v1/queue_config", parme);
 //数据修改
 export const updataQueue = parme => put("/api/v1/queue_config", parme);
 
+//绑定客如云商家
+export const bindKryShopId = parme => put("/api/v1/queue_config/bind/" + parme.merchantId + "/" + parme.shopId)
+
+export const enableAutoCall = parme => put("/api/v1/queue_config/auto_call/" + parme.merchantId + "/" + parme.status)
+
 //功能按钮接口=>
 //查询首页按钮
 export const queryButton = parme => get("/api/v1/buttons", parme);

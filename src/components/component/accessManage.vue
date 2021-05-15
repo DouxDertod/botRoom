@@ -56,6 +56,49 @@
             </el-col>
           </el-radio-group>
         </el-col>
+        <el-col :span="23" :offset="1" style="text-align: left; padding: 10px 0">
+          绑定客如云店铺ID：
+          <span v-if="showContent"
+            >{{ kryShopId }}
+            <i
+              class="el-icon-edit-outline curhand"
+              @click="showContent = false"
+            ></i
+          ></span>
+          <span v-else>
+            <el-input
+              ref="shopname"
+              style="width: 300px; vertical-align: text-top"
+              type="text"
+              :rows="3"
+              placeholder="请输入店铺Id"
+              v-model="kryShopId"
+              autofocus
+            >
+            </el-input>
+            <el-button
+              @click.native="cancelBind()"
+              style="vertical-align: bottom"
+              >取消
+            </el-button>
+            <el-button
+              @click.native="bindKryShop()"
+              @mousedown.native="$event.preventDefault()"
+              style="vertical-align: bottom;margin-left:0px"
+              type="primary"
+              >绑定
+            </el-button>
+          </span>
+        </el-col>
+        <el-col :span="23" :offset="1" style="text-align: left; padding: 10px 0">
+          开启客如云自动叫号：
+          <span style="margin-left: 25px">
+            <el-radio-group @change="enableAuotQueue()" v-model="dataList.enableAutoQueue">
+              <el-radio :label="true">开启</el-radio>
+              <el-radio :label="false">关闭</el-radio>
+            </el-radio-group>
+          </span>
+        </el-col>
         <!-- -------------- -->
         <!--此版本下列功能暂不可用-->
         <!--<el-col :span="23" :offset="1" style="text-align: left; padding: 10px 0">-->
@@ -163,7 +206,7 @@
 </template>
 
 <script>
-import { queryQueue, updataQueue } from "../../assets/js/api/api";
+import { queryQueue, updataQueue, bindKryShopId, enableAutoCall} from "../../assets/js/api/api";
 export default {
   name: "accessManage",
   data() {
@@ -181,6 +224,8 @@ export default {
       radio4: 1,
       radio5: 1,
       radio6: 1,
+      showContent:true,
+      kryShopId:""
     };
   },
   methods: {
@@ -202,6 +247,7 @@ export default {
           this.$set(this.valueTime2, 1, data.recommendEndTime);
 
           this.dataList = data;
+          this.kryShopId = data.kryShopId
         }
       });
     },
@@ -238,6 +284,55 @@ export default {
         }
       });
     },
+    bindKryShop(){
+      let parme = {}
+      parme["merchantId"] = this.merchantId
+      parme["shopId"] = this.kryShopId
+      bindKryShopId(parme).then(res=>{
+        if(res.data.retcode === 0){
+          this.$message({ type: "success", message: "绑定成功!" });
+          this.showContent = true
+          this.getData();
+        }
+      })
+    },
+    cancelBind(){
+      this.kryShopId = this.dataList.kryShopId
+      console.log(this.dataList.kryShopId)
+      this.showContent = true
+    },
+    execAutoCall(){
+      let parme = {}
+      parme["merchantId"] = this.merchantId
+      parme["status"] = this.dataList.enableAutoQueue
+      enableAutoCall(parme).then(res=>{
+        if(res.data.retcode === 0){
+          this.$message({ type: "success", message: "修改成功!" });
+          this.showContent = true
+          this.getData();
+        }
+      })
+    },
+    enableAuotQueue(){
+      if(this.dataList.enableAutoQueue){
+        this.$confirm('启用自动叫号会自动同步桌型, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          console.log("开启叫号")
+          this.execAutoCall()
+        }).catch(() => {
+          this.dataList.enableAutoQueue = false
+          this.$message({
+            type: 'info',
+            message: '已取消修改！'
+          });          
+        });
+      }else{
+        this.execAutoCall()
+      }
+    }
   },
   mounted() {
     this.merchantId=localStorage.getItem("merchantId")
