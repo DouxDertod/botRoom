@@ -185,6 +185,10 @@ export default {
           value: "-1",
           label: "已过号",
         },
+        {
+          value: "2",
+          label: "已完成",
+        }
       ],
       tableData: [],
       currentPage:1,
@@ -284,6 +288,9 @@ export default {
         case 1:
           text = "已叫号";
           break;
+        case 2:
+          text = "已完成";
+          break;  
         case -1:
           text = "已过号";
           break;
@@ -302,7 +309,7 @@ export default {
   },
   mounted() {
 
-    this.merchantId = Number(localStorage.getItem("merchantId"));
+    this.merchantId = String(localStorage.getItem("merchantId"));
     this.getTableType();
   },
 };

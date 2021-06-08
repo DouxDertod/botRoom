@@ -221,7 +221,7 @@ export default {
     addData() {},
   },
   mounted() {
-    this.merchantId = Number(localStorage.getItem("merchantId"));
+    this.merchantId = String(localStorage.getItem("merchantId"));
     this.getData();
   },
 };

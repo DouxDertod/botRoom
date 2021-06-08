@@ -187,7 +187,7 @@ export default {
     //页面数据初始化
     getData() {
       let parme = {
-        merchant_id: Number(this.merchantId),
+        merchant_id: String(this.merchantId),
       };
       queryQueue(parme).then((res) => {
         if (res.data.retcode === 0) {

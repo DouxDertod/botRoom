@@ -8,7 +8,7 @@ import router from "../../router/index.js";
 
 // 环境的切换
 if (process.env.NODE_ENV == "development") {
-  axios.defaults.baseURL = "http://hw-gz39.heyqiwu.cn:50000"; //开发环境
+  axios.defaults.baseURL = "http://localhost:50000"; //开发环境
 } else if (process.env.NODE_ENV == "debug") {
   axios.defaults.baseURL = "http://hw-gz74.heyqiwu.cn:50000"; //测试环境
 } else if (process.env.NODE_ENV == "production") {

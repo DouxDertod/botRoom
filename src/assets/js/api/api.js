@@ -129,6 +129,9 @@ export const callNumber = parme => put("/api/v1/queue", parme);
 //过号更换
 export const passNumber = parme => put("/api/v1/queue/status", parme);
 
+// 重复叫号
+export const repeatNumber = parme => put("/api/v1/queue/repeat/"+parme.merchant_id+"/"+parme.number,null);
+
 //登录设置=》
 //登录接口
 export const getLogin = parme => post("/admin/login",parme)

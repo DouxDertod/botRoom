@@ -54,8 +54,23 @@
                   >
                 </el-col>
                 <el-col  :span="11" :offset="1">{{!item.currentSerialNumber||item.currentSerialNumber=="null"?"当前没有已叫号":"当前:"+item.currentSerialNumber}}</el-col>
-
                 <el-col  :span="11" :offset="1">
+                  <el-button
+                    :disabled='!item.currentSerialNumber||item.currentSerialNumber=="null"'
+                    @click="repeatNumberBtn(item)"
+                    size="mini"
+                    :loading="repeatNumLoading"
+
+                  >{{!item.currentSerialNumber||item.currentSerialNumber=="null"?"通知":"通知:"+item.currentSerialNumber}}</el-button
+                  >
+                  <el-button
+                    :disabled='!item.currentSerialNumber||item.currentSerialNumber=="null"'
+                    @click="passNumberBtn(item)"
+                    size="mini"
+                    type="danger"
+                  >{{!item.currentSerialNumber||item.currentSerialNumber=="null"?"过号":"过号:"+item.currentSerialNumber}}</el-button>
+                </el-col>
+                <!-- <el-col  :span="11" :offset="1">
                   <el-button
                     :disabled='!item.currentSerialNumber||item.currentSerialNumber=="null"'
                     @click="passNumberBtn(item)"
@@ -64,7 +79,7 @@
 
                   >{{!item.currentSerialNumber||item.currentSerialNumber=="null"?"过号":"过号:"+item.currentSerialNumber}}</el-button
                   >
-                </el-col>
+                </el-col> -->
 
             </el-card>
           </el-col>
@@ -77,7 +92,7 @@
 <script>
   import {
     callNumber, passNumber,
-    queryQueue,
+    queryQueue, repeatNumber,
     querySchedule, updataQueue,
   } from "../../assets/js/api/api";
 export default {
@@ -90,6 +105,7 @@ export default {
       merchantId:'',
       callNumLoading:false,
       passNumLoading:false,
+      repeatNumLoading:false
     };
   },
   methods: {
@@ -117,6 +133,7 @@ export default {
         tableId:item.tableId,
         id:item.nextRecordId,
         status:1,
+        lastRecordId:item.currentRecordId
       };
       callNumber(data).then((res) => {
         if (res.data.retcode === 0) {
@@ -128,6 +145,22 @@ export default {
         }, 2000);
 
       });
+    },
+    repeatNumberBtn(item){
+      this.repeatNumLoading = true
+      const data = {
+        number:item.currentSerialNumber,
+        merchant_id: this.merchantId
+      }
+      repeatNumber(data).then(res=>{
+        if (res.data.retcode === 0) {
+          this.$message({ type: "success", message:res.data.payload });
+          this.getData();
+        }
+        setTimeout(() => {
+          this.repeatNumLoading=false;
+        }, 1000);
+      })
     },
     // 过号
     passNumberBtn(item){
@@ -174,12 +207,10 @@ export default {
         this.getData();
       });
     },
-
-
     //页面初始化数据||条件查询
     getData() {
       let parme = {
-        merchant_id: Number(this.merchantId),
+        merchant_id: String(this.merchantId),
       };
       queryQueue(parme).then((res) => {
         if (res.data.retcode === 0) {
@@ -191,13 +222,11 @@ export default {
       querySchedule(parme).then((res) => {
         if (res.data.retcode === 0) {
           let data = JSON.parse(res.data.payload);
-
           this.dataSchedule = data;
         }
       });
 
     },
-
     conditionChange(){
       this.currentPage=1;
       this.getData();
@@ -211,6 +240,8 @@ export default {
           break;
         case 1:
           text = "已叫号";
+        case 2:
+          text = "已完成";
           break;
         case -1:
           text = "已过号";
