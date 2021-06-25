@@ -181,6 +181,16 @@
           </el-col>
           <i class="el-icon-edit-outline curhand" @click="openTime"></i>
         </el-col>
+        <el-col class="info" :span="23" :offset="1">
+          <span class="toleft">会员规则：</span>
+          <el-card class="box-card">
+            <i class="el-icon-edit-outline curhand" @click="dialogRule=true"></i>
+            <span>编辑</span>
+            <div class="text item" style="margin-top:10px">
+                {{vipRule}}
+            </div>
+          </el-card>
+        </el-col>
       </el-row>
       <!-- 座位情况弹窗 -->
       <el-dialog :title="dialogTitle" :visible.sync="dialogVisible1" width="35%">
@@ -331,6 +341,22 @@
         </span>
       </el-dialog>
     </el-container>
+    <el-dialog
+      title="编辑会员规则"
+      :visible.sync="dialogRule"
+      width="30%">
+      <el-input
+        type="textarea"
+        :rows="10"
+        :autosize="{ minRows: 10, maxRows: 15}"
+        placeholder="请输入内容"
+        v-model="vipRule">
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogRule = false">取 消</el-button>
+        <el-button type="primary" @click="submitVipRule()">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -343,11 +369,14 @@ import {
   updataTable,
   delTable,
   creatTable,
+  getMerchantVipRule,
+  createMerchantVipRule
 } from "../../assets/js/api/api";
 export default {
   name: "baseInfo",
   data() {
     return {
+      dialogRule:false,
       merchantId:"",
       submitNum:"",
       fixIndex: "",
@@ -419,6 +448,7 @@ export default {
       fileList: [],
       dialogImageUrl: "",
       dialogVisible: false,
+      vipRule:''
     };
   },
   methods: {
@@ -546,6 +576,13 @@ export default {
 
         }
       });
+
+      getMerchantVipRule(parme).then((res)=>{
+        if (res.data.retcode === 0) {
+          let data = JSON.parse(res.data.payload);
+          this.vipRule = data.rule
+        }
+      })
     },
     //打开运营时间窗口
     openTime() {
@@ -785,6 +822,19 @@ export default {
         }
       });
     },
+    submitVipRule(){
+      let parme = {
+        merchantId: this.merchantId,
+        rule:this.vipRule
+      }
+      createMerchantVipRule(parme).then(res=>{
+        if (res.retcode === 0) {
+          this.dialogRule = false
+          this.getData()
+          this.$message({ type: "success", message: "修改成功" });
+        }
+      })
+    }
   },
   mounted() {
     this.merchantId=String(localStorage.getItem("merchantId"))

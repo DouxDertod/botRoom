@@ -7,6 +7,12 @@ export const getBaseInfo = parme => get("/api/v1/info", parme);
 //修改餐厅信息
 export const fixBaseInfo = parme => put("/api/v1/info", parme);
 
+//获取商家会员规则
+export const getMerchantVipRule = parme => get("/api/v1/merchant/vip/"+parme.merchant_id)
+
+//添加商家会员规则
+export const createMerchantVipRule = parme => post("/api/v1/merchant/vip/info",parme)
+
 //查询桌型
 export const getTableInfo = parme => get("/api/v1/tables", parme);
 

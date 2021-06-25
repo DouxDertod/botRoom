@@ -162,7 +162,6 @@
             >问题</span
           >
           <el-input
-            type="textarea"
             :rows="3"
             size="small"
             style="width: 80%"

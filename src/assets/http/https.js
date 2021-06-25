@@ -12,7 +12,7 @@ if (process.env.NODE_ENV == "development") {
 } else if (process.env.NODE_ENV == "debug") {
   axios.defaults.baseURL = "http://hw-gz74.heyqiwu.cn:50000"; //测试环境
 } else if (process.env.NODE_ENV == "production") {
-  axios.defaults.baseURL = "http://hw-gz74.heyqiwu.cn:50000"; //生产环境
+  axios.defaults.baseURL = "http://ciot-bot-pro.heyqiwu.cn"; //生产环境
 }
 
 //请求超时时间设置
